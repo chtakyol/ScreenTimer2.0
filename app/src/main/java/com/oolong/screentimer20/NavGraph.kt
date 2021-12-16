@@ -1,5 +1,7 @@
 package com.oolong.screentimer20
 
+import android.app.admin.DevicePolicyManager
+import android.media.AudioManager
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -14,7 +16,9 @@ import com.oolong.screentimer20.presentation.screens.SplashScreen
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
-    viewModel: CountdownTimerViewModel
+    viewModel: CountdownTimerViewModel,
+    audioManager: AudioManager,
+    devicePolicyManager: DevicePolicyManager
 ){
     NavHost(
         navController = navController,
@@ -33,9 +37,19 @@ fun SetupNavGraph(
                 initialIsTimerRunning = viewModel.isTimerRunning,
                 onArchDegreeChange = {
                     viewModel.arcDegree = it
+//                    stopMusic(audioManager)
+                    if (it <= 0) {
+//                        devicePolicyManager.lockNow()
+                    }
                 },
                 onButtonClick = {
                     viewModel.isTimerRunning = it
+                },
+                onSoundOffSwitchButtonClick = {
+                    Log.d("SoundState", it.toString())
+                },
+                onScreenOffSwitchButtonClick = {
+                    Log.d("ScreenState", it.toString())
                 }
             )
         }

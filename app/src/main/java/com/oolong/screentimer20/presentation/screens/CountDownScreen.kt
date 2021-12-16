@@ -19,19 +19,31 @@ import kotlin.math.absoluteValue
 fun CountDownScreen(
     initialArcDegree: Float = 15f,
     initialIsTimerRunning: Boolean = false,
+    initialSoundOff: Boolean = true,
+    initialScreenOff: Boolean = false,
     onArchDegreeChange: (Float) -> Unit, // this will expose the arc degree to main activity
-    onButtonClick: (Boolean) -> Unit // this will expose the is timer running to main activity
+    onButtonClick: (Boolean) -> Unit, // this will expose the is timer running to main activity
+    onSoundOffSwitchButtonClick: (Boolean) -> Unit,
+    onScreenOffSwitchButtonClick: (Boolean) -> Unit
 ){
-//    var arcDegree by remember { mutableStateOf(initialArcDegree) }
-//    var isTimerRunning by remember { mutableStateOf(initialIsTimerRunning) }
     var arcDegree by remember { mutableStateOf(initialArcDegree) }
     var isTimerRunning by remember { mutableStateOf(initialIsTimerRunning) }
+    var soundOff by remember { mutableStateOf(initialSoundOff) }
+    var screenOff by remember { mutableStateOf(initialScreenOff) }
     CountDownScreenComp(
         arcDegree = arcDegree,
         isTimerRunning = isTimerRunning,
         onArcDegreeChange = {
             arcDegree = it
             onArchDegreeChange(arcDegree) // exposing
+        },
+        onSoundOffSwitchButtonClick = {
+            soundOff = it
+            onSoundOffSwitchButtonClick(soundOff)
+        },
+        onScreenOffSwitchButtonClick = {
+            screenOff = it
+            onScreenOffSwitchButtonClick(screenOff)
         },
         onButtonClick = {
             isTimerRunning = it
@@ -48,9 +60,13 @@ fun CountDownScreen(
 fun CountDownScreenComp(
     arcDegree: Float = 90f,
     isTimerRunning: Boolean = false,
+    initialSoundOff: Boolean = true,
+    initialScreenOff: Boolean = false,
     onArcDegreeChange: (Float) -> Unit,
     onButtonClick: (Boolean) -> Unit,
-    onTick: (Float) -> Unit
+    onTick: (Float) -> Unit,
+    onSoundOffSwitchButtonClick: (Boolean) -> Unit,
+    onScreenOffSwitchButtonClick: (Boolean) -> Unit
 ){
     Column(
         modifier = Modifier
@@ -59,16 +75,16 @@ fun CountDownScreenComp(
     ) {
         SwitchButtonWithText(
             text = "Turn off sound",
-            initialStatus = true
+            initialStatus = initialSoundOff
         ){
-
+            onSoundOffSwitchButtonClick(it)
         }
 
         SwitchButtonWithText(
             text = "Turn off screen",
-            initialStatus = false
+            initialStatus = initialScreenOff
         ){
-            // TODO control start button active state.
+            onScreenOffSwitchButtonClick(it)
         }
 
         Divider()
@@ -120,6 +136,12 @@ fun CountDownScreenPreview(){
 
         },
         onButtonClick = {
+
+        },
+        onSoundOffSwitchButtonClick = {
+
+        },
+        onScreenOffSwitchButtonClick = {
 
         }
     )

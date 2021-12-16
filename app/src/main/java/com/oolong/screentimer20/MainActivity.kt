@@ -1,6 +1,9 @@
 package com.oolong.screentimer20
 
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
 import android.content.Context
+import android.media.AudioManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -31,12 +34,19 @@ class MainActivity : ComponentActivity() {
         lateinit var navController: NavHostController
         Log.d("Lifecycles", "onCreateCalled")
 
+        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+
+        val devicePolicyManager = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val compName = ComponentName(this, DeviceAdmin::class.java)
+
         setContent {
             ScreenTimer20Theme() {
                 navController = rememberNavController()
                 SetupNavGraph(
                     navController = navController,
-                    viewModel = countdownTimerViewModel
+                    viewModel = countdownTimerViewModel,
+                    audioManager = audioManager,
+                    devicePolicyManager = devicePolicyManager
                 )
             }
         }
