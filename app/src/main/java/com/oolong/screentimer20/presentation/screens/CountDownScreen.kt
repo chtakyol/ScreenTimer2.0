@@ -1,5 +1,6 @@
 package com.oolong.screentimer20
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,11 +13,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.delay
-import kotlin.math.absoluteValue
 
 @ExperimentalComposeUiApi
 @Composable
 fun CountDownScreen(
+    viewModel: CountdownTimerViewModel,
     initialArcDegree: Float = 15f,
     initialIsTimerRunning: Boolean = false,
     initialSoundOff: Boolean = true,
@@ -24,15 +25,21 @@ fun CountDownScreen(
     onArchDegreeChange: (Float) -> Unit, // this will expose the arc degree to main activity
     onButtonClick: (Boolean) -> Unit, // this will expose the is timer running to main activity
     onSoundOffSwitchButtonClick: (Boolean) -> Unit,
-    onScreenOffSwitchButtonClick: (Boolean) -> Unit
+    onScreenOffSwitchButtonClick: (Boolean) -> Unit,
+    onTick: (Float) -> Unit
 ){
     var arcDegree by remember { mutableStateOf(initialArcDegree) }
     var isTimerRunning by remember { mutableStateOf(initialIsTimerRunning) }
     var soundOff by remember { mutableStateOf(initialSoundOff) }
     var screenOff by remember { mutableStateOf(initialScreenOff) }
+    val isDeviceAdminActive by remember { mutableStateOf(viewModel.deviceAdminActive) }
+
     CountDownScreenComp(
         arcDegree = arcDegree,
         isTimerRunning = isTimerRunning,
+        initialSoundOff = soundOff,
+        initialScreenOff = screenOff,
+        isDeviceAdminActive = isDeviceAdminActive.value,
         onArcDegreeChange = {
             arcDegree = it
             onArchDegreeChange(arcDegree) // exposing
@@ -50,7 +57,14 @@ fun CountDownScreen(
             onButtonClick(isTimerRunning)
         },
         onTick = {
-            arcDegree = it
+            if (it > 0){
+                arcDegree = it
+                onTick(it)
+            } else {
+                isTimerRunning = false
+                arcDegree = initialArcDegree
+                viewModel.isTimerRunning.value = false
+            }
         }
     )
 }
@@ -61,7 +75,8 @@ fun CountDownScreenComp(
     arcDegree: Float = 90f,
     isTimerRunning: Boolean = false,
     initialSoundOff: Boolean = true,
-    initialScreenOff: Boolean = false,
+    initialScreenOff: Boolean = true,
+    isDeviceAdminActive: Boolean = true,
     onArcDegreeChange: (Float) -> Unit,
     onButtonClick: (Boolean) -> Unit,
     onTick: (Float) -> Unit,
@@ -96,7 +111,6 @@ fun CountDownScreenComp(
                 indicatorValue = arcDegree,
                 isTimerRunning = isTimerRunning,
             ){
-//                arcDegree = it
                 onArcDegreeChange(it)
             }
             DurationText(
@@ -106,22 +120,45 @@ fun CountDownScreenComp(
             )
         }
 
-        Text(text = arcDegree.toString())
+//        Text(text = arcDegree.toString())
 
         Button(
+            enabled = !(!initialSoundOff && !initialScreenOff),
             onClick = {
-//            isTimerRunning = !isTimerRunning
-                onButtonClick(!isTimerRunning)
+                if (initialScreenOff) {
+                    if (isDeviceAdminActive) {
+                        onButtonClick(!isTimerRunning)
+                    } else {
+                        onButtonClick(isTimerRunning)
+                    }
+                } else {
+                    onButtonClick(!isTimerRunning)
+                }
         }) {
             if (isTimerRunning) {
                 LaunchedEffect(key1 = arcDegree){
                     delay(100)
-//                    arcDegree -= millisToDegree(1000f)
                     onTick(arcDegree - millisToDegree(1000f))
                 }
             }
 
-            Text(text = if(isTimerRunning) "Stop" else "Start")
+            if (initialSoundOff && !initialScreenOff){
+                Text(text = if (isTimerRunning) "Stop" else "Start")
+            } else if (initialSoundOff && initialScreenOff){
+                if (isDeviceAdminActive){
+                    Text(text = if (isTimerRunning) "Stop" else "Start")
+                } else {
+                    Text(text = "Activate device admin!")
+                }
+            } else if (!initialSoundOff && initialScreenOff){
+                if (isDeviceAdminActive){
+                    Text(text = if (isTimerRunning) "Stop" else "Start")
+                } else {
+                    Text(text = "Activate device admin!")
+                }
+            } else if (!initialSoundOff && !initialScreenOff) {
+                Text(text = "Enable one feature")
+            }
         }
 
     }
@@ -132,6 +169,7 @@ fun CountDownScreenComp(
 @Preview(showBackground = true)
 fun CountDownScreenPreview(){
     CountDownScreen(
+        viewModel = CountdownTimerViewModel(),
         onArchDegreeChange = {
 
         },
@@ -142,6 +180,9 @@ fun CountDownScreenPreview(){
 
         },
         onScreenOffSwitchButtonClick = {
+
+        },
+        onTick = {
 
         }
     )

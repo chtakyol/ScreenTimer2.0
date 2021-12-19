@@ -1,9 +1,12 @@
 package com.oolong.screentimer20
 
 import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
 import android.media.AudioManager
+import android.os.Build
 import android.util.Log
-import androidx.compose.runtime.Composable
+import androidx.annotation.RequiresApi
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -12,14 +15,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.oolong.screentimer20.presentation.screens.SplashScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalComposeUiApi
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
     viewModel: CountdownTimerViewModel,
     audioManager: AudioManager,
-    devicePolicyManager: DevicePolicyManager
+    devicePolicyManager: DevicePolicyManager,
+    componentName: ComponentName,
+    activity: MainActivity,
 ){
+
     NavHost(
         navController = navController,
         startDestination = Screen.CountdownTimer.route
@@ -33,23 +40,66 @@ fun SetupNavGraph(
             route = Screen.CountdownTimer.route
         ){
             CountDownScreen(
+                viewModel = viewModel,
                 initialArcDegree = viewModel.arcDegree,
-                initialIsTimerRunning = viewModel.isTimerRunning,
+                initialIsTimerRunning = viewModel.isTimerRunning.value,
+                initialSoundOff = viewModel.soundOff.value,
+                initialScreenOff = viewModel.deviceAdminActive.value,
                 onArchDegreeChange = {
                     viewModel.arcDegree = it
-//                    stopMusic(audioManager)
-                    if (it <= 0) {
-//                        devicePolicyManager.lockNow()
-                    }
+
                 },
                 onButtonClick = {
-                    viewModel.isTimerRunning = it
+                    if (viewModel.soundOff.value && !viewModel.screenOff.value){
+                        viewModel.isTimerRunning.value = it
+                    } else if (viewModel.soundOff.value && viewModel.screenOff.value){
+                        if(viewModel.deviceAdminActive.value){
+                            viewModel.isTimerRunning.value = it
+                        } else {
+                            askForDeviceAdminPermission(
+                                devicePolicyManager =devicePolicyManager,
+                                activity = activity,
+                                componentName = componentName
+                            )
+
+                        }
+                    } else if (!viewModel.soundOff.value && viewModel.screenOff.value){
+                        if(devicePolicyManager.isAdminActive(componentName)){
+                            viewModel.isTimerRunning.value = it
+                        } else {
+                            askForDeviceAdminPermission(
+                                devicePolicyManager =devicePolicyManager,
+                                activity = activity,
+                                componentName = componentName
+                            )
+
+                        }
+                    }
                 },
                 onSoundOffSwitchButtonClick = {
-                    Log.d("SoundState", it.toString())
+                    viewModel.soundOff.value = it
+                    Log.d("NavGraph", viewModel.soundOff.value.toString())
                 },
                 onScreenOffSwitchButtonClick = {
-                    Log.d("ScreenState", it.toString())
+                    viewModel.screenOff.value = it
+                    Log.d("NavGraph", viewModel.screenOff.value.toString())
+                },
+                onTick = {
+                    if (it <= 0.086){
+                        Log.d("NavGraph", viewModel.screenOff.value.toString())
+
+                        if(viewModel.soundOff.value && !viewModel.screenOff.value){
+                            stopMusic(audioManager = audioManager)
+                        } else if (!viewModel.soundOff.value && viewModel.screenOff.value){
+                            lockDevice(devicePolicyManager = devicePolicyManager, componentName = componentName)
+                        } else if (viewModel.soundOff.value && viewModel.screenOff.value){
+                            lockDevice(devicePolicyManager = devicePolicyManager, componentName = componentName)
+                            stopMusic(audioManager = audioManager)
+                        }
+                        viewModel.isTimerRunning.value = false
+                    } else {
+                        viewModel.arcDegree = it
+                    }
                 }
             )
         }

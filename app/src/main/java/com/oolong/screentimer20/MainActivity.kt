@@ -1,13 +1,19 @@
 package com.oolong.screentimer20
 
+import android.app.Activity
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +34,8 @@ class MainActivity : ComponentActivity() {
     private val TIMER_VALUES = "timer_values"
     private val countdownTimerViewModel = CountdownTimerViewModel()
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +45,9 @@ class MainActivity : ComponentActivity() {
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
 
         val devicePolicyManager = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val compName = ComponentName(this, DeviceAdmin::class.java)
+        val componentName = ComponentName(this, DeviceAdmin::class.java)
+
+        countdownTimerViewModel.deviceAdminActive.value = devicePolicyManager.isAdminActive(componentName)
 
         setContent {
             ScreenTimer20Theme() {
@@ -46,8 +56,25 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     viewModel = countdownTimerViewModel,
                     audioManager = audioManager,
-                    devicePolicyManager = devicePolicyManager
+                    devicePolicyManager = devicePolicyManager,
+                    componentName = componentName,
+                    activity = this
                 )
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            100 -> {
+                if (resultCode == Activity.RESULT_OK ) {
+                    Log.d("Result", "OK")
+                    countdownTimerViewModel.deviceAdminActive.value = true
+                } else {
+                    Log.d("Result", "Na")
+                }
+
             }
         }
     }
@@ -56,8 +83,10 @@ class MainActivity : ComponentActivity() {
         super.onStart()
         Log.d("Lifecycles", "onStartCalled")
         CountDownService.stopService(this)
-        countdownTimerViewModel.isTimerRunning = getIsRunning()
-        val initialTimeInMillis = if (countdownTimerViewModel.isTimerRunning) getTimeInMillis() - calculateElapsedTimeInMillis() else getTimeInMillis()
+        countdownTimerViewModel.soundOff.value = getTurnOffSound()
+
+        countdownTimerViewModel.isTimerRunning.value = getIsRunning()
+        val initialTimeInMillis = if (countdownTimerViewModel.isTimerRunning.value) getTimeInMillis() - calculateElapsedTimeInMillis() else getTimeInMillis()
         countdownTimerViewModel.arcDegree = millisToDegree(initialTimeInMillis.toFloat())
 
     }
@@ -68,11 +97,12 @@ class MainActivity : ComponentActivity() {
         Log.d("Lifecycles", countdownTimerViewModel.arcDegree.toString())
 
         saveCountdownTimerValues(
-            isTimerRunning = countdownTimerViewModel.isTimerRunning,
+            turnOffSound = countdownTimerViewModel.soundOff.value,
+            isTimerRunning = countdownTimerViewModel.isTimerRunning.value,
             timeInMillis = degreeToMillis(countdownTimerViewModel.arcDegree)
         )
 
-        if(countdownTimerViewModel.isTimerRunning){
+        if(countdownTimerViewModel.isTimerRunning.value){
             saveSystemTimeInMillis()
 
             CountDownService.startService(
@@ -98,14 +128,21 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun saveCountdownTimerValues(
+        turnOffSound: Boolean,
         isTimerRunning: Boolean,
         timeInMillis: Long
     ){
         val sharedPreference =  getSharedPreferences(TIMER_VALUES,Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
+        editor.putBoolean("turnOffSound", turnOffSound)
         editor.putBoolean("isTimerRunning", isTimerRunning)
         editor.putLong("timeInMillis", timeInMillis)
         editor.apply()
+    }
+
+    private fun getTurnOffSound(): Boolean {
+        val sharedPreference = getSharedPreferences(TIMER_VALUES, Context.MODE_PRIVATE)
+        return sharedPreference.getBoolean("turnOffSound", true)
     }
 
     private fun getIsRunning(): Boolean{
