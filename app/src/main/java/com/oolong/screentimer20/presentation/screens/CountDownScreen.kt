@@ -13,6 +13,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.delay
+import kotlin.math.absoluteValue
 
 @ExperimentalComposeUiApi
 @Composable
@@ -43,6 +44,9 @@ fun CountDownScreen(
         onArcDegreeChange = {
             arcDegree = it
             onArchDegreeChange(arcDegree) // exposing
+        },
+        onTouchDone = {
+            viewModel.intendedArcDegree = it
         },
         onSoundOffSwitchButtonClick = {
             soundOff = it
@@ -78,6 +82,7 @@ fun CountDownScreenComp(
     initialScreenOff: Boolean = true,
     isDeviceAdminActive: Boolean = true,
     onArcDegreeChange: (Float) -> Unit,
+    onTouchDone: (Float) -> Unit,
     onButtonClick: (Boolean) -> Unit,
     onTick: (Float) -> Unit,
     onSoundOffSwitchButtonClick: (Boolean) -> Unit,
@@ -110,9 +115,13 @@ fun CountDownScreenComp(
             CircularSlider(
                 indicatorValue = arcDegree,
                 isTimerRunning = isTimerRunning,
-            ){
-                onArcDegreeChange(it)
-            }
+                onValueChange = {
+                    onArcDegreeChange(it)
+                },
+                onTouchDone = {
+                    onTouchDone(it)
+                }
+            )
             DurationText(
                 hourVal = getHours(degreeToMillis(arcDegree)),
                 minuteVal = getMinutes(degreeToMillis(arcDegree)),

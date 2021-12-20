@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 
 class CountdownTimerViewModel : ViewModel() {
     var arcDegree: Float = 0f
+    var intendedArcDegree: Float = 0f
     var isTimerRunning: MutableState<Boolean> = mutableStateOf(false)
     var soundOff: MutableState<Boolean> = mutableStateOf(true)
     var screenOff: MutableState<Boolean> = mutableStateOf(false)

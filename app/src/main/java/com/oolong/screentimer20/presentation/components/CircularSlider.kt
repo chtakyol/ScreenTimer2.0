@@ -45,7 +45,8 @@ fun CircularSlider(
     handleColor: Color = MaterialTheme.colors.primaryVariant,
     handleStrokeWidth: Float = 125f,
     isTimerRunning: Boolean = false,
-    onValueChange: (Float) -> Unit
+    onValueChange: (Float) -> Unit,
+    onTouchDone: (Float) -> Unit
 ){
     var totalAngle by remember { mutableStateOf(indicatorValue) }
 
@@ -161,6 +162,7 @@ fun CircularSlider(
                     MotionEvent.ACTION_UP -> {
                         shouldDownScale = false
                         shouldUpScale = false
+                        onTouchDone(sweepAngle)
                         true
                     }
                     else -> false
@@ -244,7 +246,12 @@ fun DrawScope.foregroundIndicator(
 @Composable
 @Preview(showBackground = true)
 fun CircularSliderPreview(){
-    CircularSlider(){
+    CircularSlider(
+        onValueChange = {
+                        
+        },
+        onTouchDone = {
 
-    }
+        }
+    )
 }

@@ -86,15 +86,29 @@ class MainActivity : ComponentActivity() {
         countdownTimerViewModel.soundOff.value = getTurnOffSound()
         countdownTimerViewModel.screenOff.value = getTurnOffScreen()
         countdownTimerViewModel.arcDegree = millisToDegree(getTimeInMillis().toFloat())
+        countdownTimerViewModel.isTimerRunning.value = getIsRunning()
 
-        if (countdownTimerViewModel.arcDegree > 0) {
-            countdownTimerViewModel.isTimerRunning.value = getIsRunning()
-            val initialTimeInMillis = if (countdownTimerViewModel.isTimerRunning.value) getTimeInMillis() - calculateElapsedTimeInMillis() else getTimeInMillis()
-            countdownTimerViewModel.arcDegree = millisToDegree(initialTimeInMillis.toFloat())
-        } else {
+        val closedTimeInMillis = getTimeInMillis() - calculateElapsedTimeInMillis()
+
+        if (closedTimeInMillis <= 0){
             countdownTimerViewModel.isTimerRunning.value = false
-            countdownTimerViewModel.arcDegree = millisToDegree(0F)
+            countdownTimerViewModel.arcDegree = getIntendedArcDegree()
+        } else {
+            countdownTimerViewModel.arcDegree = if (countdownTimerViewModel.isTimerRunning.value) {
+                millisToDegree(closedTimeInMillis.toFloat())
+            } else {
+                getTimeInMillis().toFloat()
+            }
         }
+
+//        if (countdownTimerViewModel.arcDegree > 0) {
+//
+//            val initialTimeInMillis = if (countdownTimerViewModel.isTimerRunning.value) getTimeInMillis() - calculateElapsedTimeInMillis() else getTimeInMillis()
+//            countdownTimerViewModel.arcDegree = millisToDegree(initialTimeInMillis.toFloat())
+//        } else {
+//            countdownTimerViewModel.isTimerRunning.value = false
+//            countdownTimerViewModel.arcDegree = millisToDegree(0F)
+//        }
 
 
     }
@@ -107,7 +121,8 @@ class MainActivity : ComponentActivity() {
             turnOffSound = countdownTimerViewModel.soundOff.value,
             turnOffScreen= countdownTimerViewModel.screenOff.value,
             isTimerRunning = countdownTimerViewModel.isTimerRunning.value,
-            timeInMillis = degreeToMillis(countdownTimerViewModel.arcDegree)
+            timeInMillis = degreeToMillis(countdownTimerViewModel.arcDegree),
+            intendedArcDegree = countdownTimerViewModel.intendedArcDegree
         )
 
         if(countdownTimerViewModel.isTimerRunning.value){
@@ -138,7 +153,8 @@ class MainActivity : ComponentActivity() {
         turnOffSound: Boolean,
         turnOffScreen: Boolean,
         isTimerRunning: Boolean,
-        timeInMillis: Long
+        timeInMillis: Long,
+        intendedArcDegree: Float
     ){
         val sharedPreference =  getSharedPreferences(TIMER_VALUES,Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
@@ -146,7 +162,13 @@ class MainActivity : ComponentActivity() {
         editor.putBoolean("turnOffScreen", turnOffScreen)
         editor.putBoolean("isTimerRunning", isTimerRunning)
         editor.putLong("timeInMillis", timeInMillis)
+        editor.putFloat("intendedArcDegree", intendedArcDegree)
         editor.apply()
+    }
+
+    private fun getIntendedArcDegree(): Float {
+        val sharedPreferences = getSharedPreferences(TIMER_VALUES, Context.MODE_PRIVATE)
+        return sharedPreferences.getFloat("intendedArcDegree", 0f)
     }
 
     private fun getTurnOffScreen(): Boolean {
