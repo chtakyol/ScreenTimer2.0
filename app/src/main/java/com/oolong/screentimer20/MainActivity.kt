@@ -84,32 +84,39 @@ class MainActivity : ComponentActivity() {
         Log.d("Lifecycles", "onStartCalled")
         CountDownService.stopService(this)
         countdownTimerViewModel.soundOff.value = getTurnOffSound()
+        countdownTimerViewModel.screenOff.value = getTurnOffScreen()
+        countdownTimerViewModel.arcDegree = millisToDegree(getTimeInMillis().toFloat())
 
-        countdownTimerViewModel.isTimerRunning.value = getIsRunning()
-        val initialTimeInMillis = if (countdownTimerViewModel.isTimerRunning.value) getTimeInMillis() - calculateElapsedTimeInMillis() else getTimeInMillis()
-        countdownTimerViewModel.arcDegree = millisToDegree(initialTimeInMillis.toFloat())
+        if (countdownTimerViewModel.arcDegree > 0) {
+            countdownTimerViewModel.isTimerRunning.value = getIsRunning()
+            val initialTimeInMillis = if (countdownTimerViewModel.isTimerRunning.value) getTimeInMillis() - calculateElapsedTimeInMillis() else getTimeInMillis()
+            countdownTimerViewModel.arcDegree = millisToDegree(initialTimeInMillis.toFloat())
+        } else {
+            countdownTimerViewModel.isTimerRunning.value = false
+            countdownTimerViewModel.arcDegree = millisToDegree(0F)
+        }
+
 
     }
 
     override fun onStop() {
         super.onStop()
         Log.d("Lifecycles", "onStopCalled")
-        Log.d("Lifecycles", countdownTimerViewModel.arcDegree.toString())
 
         saveCountdownTimerValues(
             turnOffSound = countdownTimerViewModel.soundOff.value,
+            turnOffScreen= countdownTimerViewModel.screenOff.value,
             isTimerRunning = countdownTimerViewModel.isTimerRunning.value,
             timeInMillis = degreeToMillis(countdownTimerViewModel.arcDegree)
         )
 
         if(countdownTimerViewModel.isTimerRunning.value){
             saveSystemTimeInMillis()
-
             CountDownService.startService(
                 context = this,
                 totalTime = degreeToMillis(countdownTimerViewModel.arcDegree),
-                turnOffSound = false,
-                turnOffScreen = false
+                turnOffSound = countdownTimerViewModel.soundOff.value,
+                turnOffScreen = countdownTimerViewModel.screenOff.value
             )
         }
     }
@@ -129,15 +136,22 @@ class MainActivity : ComponentActivity() {
 
     private fun saveCountdownTimerValues(
         turnOffSound: Boolean,
+        turnOffScreen: Boolean,
         isTimerRunning: Boolean,
         timeInMillis: Long
     ){
         val sharedPreference =  getSharedPreferences(TIMER_VALUES,Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
         editor.putBoolean("turnOffSound", turnOffSound)
+        editor.putBoolean("turnOffScreen", turnOffScreen)
         editor.putBoolean("isTimerRunning", isTimerRunning)
         editor.putLong("timeInMillis", timeInMillis)
         editor.apply()
+    }
+
+    private fun getTurnOffScreen(): Boolean {
+        val sharedPreference = getSharedPreferences(TIMER_VALUES, Context.MODE_PRIVATE)
+        return sharedPreference.getBoolean("turnOffScreen", false)
     }
 
     private fun getTurnOffSound(): Boolean {
