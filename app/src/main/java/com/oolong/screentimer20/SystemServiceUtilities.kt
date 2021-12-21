@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.res.stringResource
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun stopMusic(
@@ -64,7 +65,10 @@ fun askForDeviceAdminPermission(
 ){
     val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
     intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
-    intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "You should enable the app!")
+    intent.putExtra(
+        DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+        R.string.device_manager_explanation
+    )
     activity.startActivityForResult(intent, 100)
 }
 

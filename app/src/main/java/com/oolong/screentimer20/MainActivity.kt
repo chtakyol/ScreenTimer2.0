@@ -88,6 +88,7 @@ class MainActivity : ComponentActivity() {
         countdownTimerViewModel.arcDegree = millisToDegree(getTimeInMillis().toFloat())
         countdownTimerViewModel.isTimerRunning.value = getIsRunning()
 
+
         val closedTimeInMillis = getTimeInMillis() - calculateElapsedTimeInMillis()
 
         if (closedTimeInMillis <= 0){
@@ -100,17 +101,6 @@ class MainActivity : ComponentActivity() {
                 getTimeInMillis().toFloat()
             }
         }
-
-//        if (countdownTimerViewModel.arcDegree > 0) {
-//
-//            val initialTimeInMillis = if (countdownTimerViewModel.isTimerRunning.value) getTimeInMillis() - calculateElapsedTimeInMillis() else getTimeInMillis()
-//            countdownTimerViewModel.arcDegree = millisToDegree(initialTimeInMillis.toFloat())
-//        } else {
-//            countdownTimerViewModel.isTimerRunning.value = false
-//            countdownTimerViewModel.arcDegree = millisToDegree(0F)
-//        }
-
-
     }
 
     override fun onStop() {

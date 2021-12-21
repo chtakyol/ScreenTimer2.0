@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue
@@ -94,14 +95,14 @@ fun CountDownScreenComp(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SwitchButtonWithText(
-            text = "Turn off sound",
+            text = stringResource(id = R.string.sound_switch_text),
             initialStatus = initialSoundOff
         ){
             onSoundOffSwitchButtonClick(it)
         }
 
         SwitchButtonWithText(
-            text = "Turn off screen",
+            text = stringResource(id = R.string.screen_switch_text),
             initialStatus = initialScreenOff
         ){
             onScreenOffSwitchButtonClick(it)
@@ -152,21 +153,21 @@ fun CountDownScreenComp(
             }
 
             if (initialSoundOff && !initialScreenOff){
-                Text(text = if (isTimerRunning) "Stop" else "Start")
+                Text(text = if (isTimerRunning) stringResource(id = R.string.stop) else stringResource(id = R.string.start))
             } else if (initialSoundOff && initialScreenOff){
                 if (isDeviceAdminActive){
-                    Text(text = if (isTimerRunning) "Stop" else "Start")
+                    Text(text = if (isTimerRunning) stringResource(id = R.string.stop) else stringResource(id = R.string.start))
                 } else {
-                    Text(text = "Activate device admin!")
+                    Text(text = stringResource(id = R.string.activate_device_admin_button_text))
                 }
             } else if (!initialSoundOff && initialScreenOff){
                 if (isDeviceAdminActive){
-                    Text(text = if (isTimerRunning) "Stop" else "Start")
+                    Text(text = if (isTimerRunning) stringResource(id = R.string.stop) else stringResource(id = R.string.start))
                 } else {
-                    Text(text = "Activate device admin!")
+                    Text(text = stringResource(id = R.string.activate_device_admin_button_text))
                 }
             } else if (!initialSoundOff && !initialScreenOff) {
-                Text(text = "Enable one feature")
+                Text(text = stringResource(id = R.string.passive_button_text))
             }
         }
 

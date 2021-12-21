@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,7 +29,7 @@ fun DurationText(
                 fontSize = 24.sp
             )
             Text(
-                text = "hr",
+                text = stringResource(id = R.string.hour_short_text),
                 modifier = Modifier.offset(y = (-2).dp)
             )
         }
@@ -41,7 +42,7 @@ fun DurationText(
                 fontSize = 24.sp
             )
             Text(
-                text = "min",
+                text = stringResource(id = R.string.minute_short_text),
                 modifier = Modifier.offset(y = (-2).dp)
             )
         }
@@ -54,7 +55,7 @@ fun DurationText(
                 fontSize = 24.sp
             )
             Text(
-                text = "sec",
+                text = stringResource(id = R.string.second_short_text),
                 modifier = Modifier.offset(y = (-2).dp)
             )
         }

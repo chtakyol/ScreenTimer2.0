@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">ScreenTimer2.0</string>
+    <string name="device_manager_explanation">For activating screen timer feature app need to be configure as admin.</string>
+    <string name="sound_switch_text">Turn off sound</string>
+    <string name="screen_switch_text">Turn off screen</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="activate_device_admin_button_text">Activate device admin!</string>
+    <string name="passive_button_text">You need enable one feature!</string>
+    <string name="hour_short_text">hr</string>
+    <string name="minute_short_text">min</string>
+    <string name="second_short_text">sec</string>
 </resources>
