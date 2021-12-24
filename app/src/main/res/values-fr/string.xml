@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">ScreenTimer</string>
+    <string name="device_manager_explanation">
+        "Pour activer la fonction de minuterie d'écran, l'application doit être configurée en tant qu'administrateur."
+    </string>
+    <string name="sound_switch_text">"Désactiver le son"</string>
+    <string name="screen_switch_text">"Éteindre l\'écran"</string>
+    <string name="start">Démarrer</string>
+    <string name="stop">Arrêter</string>
+    <string name="activate_device_admin_button_text">"Activez l'administrateur de l'appareil!"</string>
+    <string name="passive_button_text">Vous devez activer une fonctionnalité!</string>
+    <string name="hour_short_text">hr</string>
+    <string name="minute_short_text">min</string>
+    <string name="second_short_text">sec</string>
+</resources>

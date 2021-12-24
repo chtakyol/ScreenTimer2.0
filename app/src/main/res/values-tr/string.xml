@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ScreenTimer</string>
+    <string name="device_manager_explanation">Ekran zamanlayıcı özelliği için App Cihaz Yöneticisi Olarak Ayarlanmalı</string>
+    <string name="sound_switch_text">Sesi kapat</string>
+    <string name="screen_switch_text">Ekranı kapat</string>
+    <string name="start">Başla</string>
+    <string name="stop">Durdur</string>
+    <string name="activate_device_admin_button_text">Cihaz Yöneticisini Aktifleştir!</string>
+    <string name="passive_button_text">En az bir özelliği aktif etmelisin!</string>
+    <string name="hour_short_text">s</string>
+    <string name="minute_short_text">dk</string>
+    <string name="second_short_text">sn</string>
+</resources>

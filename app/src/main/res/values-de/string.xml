@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ScreenTimer</string>
+    <string name="device_manager_explanation">Zum Aktivieren der Bildschirm-Timer-Funktion muss die App als Administrator konfiguriert werden.</string>
+    <string name="sound_switch_text">Ton ausschalten</string>
+    <string name="screen_switch_text">Bildschirm ausschalten</string>
+    <string name="start">Anfang</string>
+    <string name="stop">Halt</string>
+    <string name="activate_device_admin_button_text">Geräteadministrator aktivieren!</string>
+    <string name="passive_button_text">¡Activar el administrador del dispositivo!</string>
+    <string name="hour_short_text">hr</string>
+    <string name="minute_short_text">Mindest</string>
+    <string name="second_short_text">Sek</string>
+</resources>

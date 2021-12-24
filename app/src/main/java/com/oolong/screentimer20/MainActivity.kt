@@ -88,12 +88,17 @@ class MainActivity : ComponentActivity() {
         countdownTimerViewModel.arcDegree = millisToDegree(getTimeInMillis().toFloat())
         countdownTimerViewModel.isTimerRunning.value = getIsRunning()
 
+        Log.d("onStart", countdownTimerViewModel.soundOff.value.toString())
+        Log.d("onStart", countdownTimerViewModel.screenOff.value.toString())
+        Log.d("onStart", countdownTimerViewModel.isTimerRunning.value.toString())
+        Log.d("onStart", getReadableTime(degreeToMillis(countdownTimerViewModel.arcDegree)))
+        Log.d("onStart", countdownTimerViewModel.intendedArcDegree.toString())
 
         val closedTimeInMillis = getTimeInMillis() - calculateElapsedTimeInMillis()
 
         if (closedTimeInMillis <= 0){
             countdownTimerViewModel.isTimerRunning.value = false
-            countdownTimerViewModel.arcDegree = getIntendedArcDegree()
+            countdownTimerViewModel.arcDegree = millisToDegree(getTimeInMillis().toFloat())
         } else {
             countdownTimerViewModel.arcDegree = if (countdownTimerViewModel.isTimerRunning.value) {
                 millisToDegree(closedTimeInMillis.toFloat())
@@ -106,6 +111,11 @@ class MainActivity : ComponentActivity() {
     override fun onStop() {
         super.onStop()
         Log.d("Lifecycles", "onStopCalled")
+        Log.d("onStop", countdownTimerViewModel.soundOff.value.toString())
+        Log.d("onStop", countdownTimerViewModel.screenOff.value.toString())
+        Log.d("onStop", countdownTimerViewModel.isTimerRunning.value.toString())
+        Log.d("onStop", getReadableTime(degreeToMillis(countdownTimerViewModel.arcDegree)))
+        Log.d("onStop", countdownTimerViewModel.intendedArcDegree.toString())
 
         saveCountdownTimerValues(
             turnOffSound = countdownTimerViewModel.soundOff.value,

@@ -34,7 +34,7 @@ fun SetupNavGraph(
         composable(
             route = Screen.Splash.route
         ){
-            SplashScreen()
+            SplashScreen(navController = navController)
         }
         composable(
             route = Screen.CountdownTimer.route
@@ -81,6 +81,12 @@ fun SetupNavGraph(
                     Log.d("NavGraph", viewModel.soundOff.value.toString())
                 },
                 onScreenOffSwitchButtonClick = {
+                    if (viewModel.screenOff.value){
+                        removeActiveAdmin(
+                            devicePolicyManager = devicePolicyManager,
+                            componentName = componentName
+                        )
+                    }
                     viewModel.screenOff.value = it
                     Log.d("NavGraph", viewModel.screenOff.value.toString())
                 },

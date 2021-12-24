@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ScreenTimer</string>
+    <string name="device_manager_explanation">Para activar la función de temporizador de pantalla, la aplicación debe configurarse como administrador.</string>
+    <string name="sound_switch_text">Apagar el sonido</string>
+    <string name="screen_switch_text">Apagar la pantalla</string>
+    <string name="start">Comienzo</string>
+    <string name="stop">Detener</string>
+    <string name="activate_device_admin_button_text">¡Activar el administrador del dispositivo!</string>
+    <string name="passive_button_text">¡Activar el administrador del dispositivo!</string>
+    <string name="hour_short_text">hr</string>
+    <string name="minute_short_text">min</string>
+    <string name="second_short_text">seg</string>
+</resources>

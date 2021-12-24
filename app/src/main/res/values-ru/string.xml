@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ScreenTimer</string>
+    <string name="device_manager_explanation">Для активации функции таймера экрана приложение должно быть настроено как администратор.</string>
+    <string name="sound_switch_text">Выключить звук</string>
+    <string name="screen_switch_text">Выключить экран</string>
+    <string name="start">Начинать</string>
+    <string name="stop">Останавливаться</string>
+    <string name="activate_device_admin_button_text">Активируйте админку устройства!</string>
+    <string name="passive_button_text">Вам нужно включить одну функцию!</string>
+    <string name="hour_short_text">час</string>
+    <string name="minute_short_text">мин</string>
+    <string name="second_short_text">сек</string>
+</resources>
