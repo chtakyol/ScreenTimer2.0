@@ -1,11 +1,11 @@
 package com.oolong.screentimer20
 
 import android.util.Log
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,6 +13,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.oolong.screentimer20.ui.theme.ScreenTimer20Theme
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue
 
@@ -91,8 +93,12 @@ fun CountDownScreenComp(
 ){
     Column(
         modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+            .padding(8.dp)
+            .offset(y=32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
     ) {
         SwitchButtonWithText(
             text = stringResource(id = R.string.sound_switch_text),
@@ -130,9 +136,11 @@ fun CountDownScreenComp(
             )
         }
 
+        Divider()
 //        Text(text = arcDegree.toString())
 
         Button(
+            modifier = Modifier.padding(16.dp),
             enabled = !(!initialSoundOff && !initialScreenOff),
             onClick = {
                 if (initialScreenOff) {
@@ -178,22 +186,24 @@ fun CountDownScreenComp(
 @Composable
 @Preview(showBackground = true)
 fun CountDownScreenPreview(){
-    CountDownScreen(
-        viewModel = CountdownTimerViewModel(),
-        onArchDegreeChange = {
+    ScreenTimer20Theme() {
+        CountDownScreen(
+            viewModel = CountdownTimerViewModel(),
+            onArchDegreeChange = {
 
-        },
-        onButtonClick = {
+            },
+            onButtonClick = {
 
-        },
-        onSoundOffSwitchButtonClick = {
+            },
+            onSoundOffSwitchButtonClick = {
 
-        },
-        onScreenOffSwitchButtonClick = {
+            },
+            onScreenOffSwitchButtonClick = {
 
-        },
-        onTick = {
+            },
+            onTick = {
 
-        }
-    )
+            }
+        )
+    }
 }

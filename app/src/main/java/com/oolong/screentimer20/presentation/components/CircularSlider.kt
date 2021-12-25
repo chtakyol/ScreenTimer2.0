@@ -38,7 +38,7 @@ fun CircularSlider(
     canvasSize: Dp = 300.dp,
     indicatorValue: Float = 0f,
     maxIndicatorValue: Int = 100,
-    backgroundIndicatorColor: Color = MaterialTheme.colors.onSecondary.copy(alpha = ContentAlpha.disabled),
+    backgroundIndicatorColor: Color = MaterialTheme.colors.onBackground.copy(alpha = .1f),
     backgroundIndicatorStrokeWidth: Float = 100f,
     foregroundIndicatorColor: Color = MaterialTheme.colors.primary,
     foregroundIndicatorStrokeWidth: Float = 80f,

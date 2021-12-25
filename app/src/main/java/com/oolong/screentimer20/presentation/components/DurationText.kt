@@ -1,6 +1,7 @@
 package com.oolong.screentimer20
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,11 +27,13 @@ fun DurationText(
         ){
             Text(
                 text = hourVal.toString(),
-                fontSize = 24.sp
+                fontSize = 24.sp,
+                color = MaterialTheme.colors.onSurface
             )
             Text(
                 text = stringResource(id = R.string.hour_short_text),
-                modifier = Modifier.offset(y = (-2).dp)
+                modifier = Modifier.offset(y = (-2).dp),
+                color = MaterialTheme.colors.onSurface
             )
         }
 
@@ -39,11 +42,13 @@ fun DurationText(
         ) {
             Text(
                 text = minuteVal.toString(),
-                fontSize = 24.sp
+                fontSize = 24.sp,
+                color = MaterialTheme.colors.onSurface
             )
             Text(
                 text = stringResource(id = R.string.minute_short_text),
-                modifier = Modifier.offset(y = (-2).dp)
+                modifier = Modifier.offset(y = (-2).dp),
+                color = MaterialTheme.colors.onSurface
             )
         }
 
@@ -52,11 +57,13 @@ fun DurationText(
         ) {
             Text(
                 text = secondVal.toString(),
-                fontSize = 24.sp
+                fontSize = 24.sp,
+                color = MaterialTheme.colors.onSurface
             )
             Text(
                 text = stringResource(id = R.string.second_short_text),
-                modifier = Modifier.offset(y = (-2).dp)
+                modifier = Modifier.offset(y = (-2).dp),
+                color = MaterialTheme.colors.onSurface
             )
         }
 
