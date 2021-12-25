@@ -72,13 +72,11 @@ fun SetupNavGraph(
                                 activity = activity,
                                 componentName = componentName
                             )
-
                         }
                     }
                 },
                 onSoundOffSwitchButtonClick = {
                     viewModel.soundOff.value = it
-                    Log.d("NavGraph", viewModel.soundOff.value.toString())
                 },
                 onScreenOffSwitchButtonClick = {
                     if (viewModel.screenOff.value){
@@ -88,12 +86,9 @@ fun SetupNavGraph(
                         )
                     }
                     viewModel.screenOff.value = it
-                    Log.d("NavGraph", viewModel.screenOff.value.toString())
                 },
                 onTick = {
                     if (it <= 0.086){
-                        Log.d("NavGraph", viewModel.screenOff.value.toString())
-
                         if(viewModel.soundOff.value && !viewModel.screenOff.value){
                             stopMusic(audioManager = audioManager)
                         } else if (!viewModel.soundOff.value && viewModel.screenOff.value){

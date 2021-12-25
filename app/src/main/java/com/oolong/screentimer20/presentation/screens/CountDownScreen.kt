@@ -1,6 +1,5 @@
 package com.oolong.screentimer20
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -16,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.oolong.screentimer20.ui.theme.ScreenTimer20Theme
 import kotlinx.coroutines.delay
-import kotlin.math.absoluteValue
 
 @ExperimentalComposeUiApi
 @Composable
@@ -37,10 +35,12 @@ fun CountDownScreen(
     var soundOff by remember { mutableStateOf(initialSoundOff) }
     var screenOff by remember { mutableStateOf(initialScreenOff) }
     val isDeviceAdminActive by remember { mutableStateOf(viewModel.deviceAdminActive) }
+    var enableState by remember {mutableStateOf(true) }
 
     CountDownScreenComp(
         arcDegree = arcDegree,
         isTimerRunning = isTimerRunning,
+        switchButtonStatus = enableState,
         initialSoundOff = soundOff,
         initialScreenOff = screenOff,
         isDeviceAdminActive = isDeviceAdminActive.value,
@@ -61,6 +61,7 @@ fun CountDownScreen(
         },
         onButtonClick = {
             isTimerRunning = it
+            enableState = !it
             onButtonClick(isTimerRunning)
         },
         onTick = {
@@ -81,6 +82,7 @@ fun CountDownScreen(
 fun CountDownScreenComp(
     arcDegree: Float = 90f,
     isTimerRunning: Boolean = false,
+    switchButtonStatus: Boolean = true,
     initialSoundOff: Boolean = true,
     initialScreenOff: Boolean = true,
     isDeviceAdminActive: Boolean = true,
@@ -102,14 +104,16 @@ fun CountDownScreenComp(
     ) {
         SwitchButtonWithText(
             text = stringResource(id = R.string.sound_switch_text),
-            initialStatus = initialSoundOff
+            initialStatus = initialSoundOff,
+            enabled = switchButtonStatus
         ){
             onSoundOffSwitchButtonClick(it)
         }
 
         SwitchButtonWithText(
             text = stringResource(id = R.string.screen_switch_text),
-            initialStatus = initialScreenOff
+            initialStatus = initialScreenOff,
+            enabled = switchButtonStatus
         ){
             onScreenOffSwitchButtonClick(it)
         }
@@ -137,7 +141,6 @@ fun CountDownScreenComp(
         }
 
         Divider()
-//        Text(text = arcDegree.toString())
 
         Button(
             modifier = Modifier.padding(16.dp),
@@ -178,7 +181,6 @@ fun CountDownScreenComp(
                 Text(text = stringResource(id = R.string.passive_button_text))
             }
         }
-
     }
 }
 

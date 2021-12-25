@@ -66,7 +66,6 @@ fun DurationText(
                 color = MaterialTheme.colors.onSurface
             )
         }
-
     }
 }
 

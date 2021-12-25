@@ -34,7 +34,6 @@ class MainActivity : ComponentActivity() {
     private val TIMER_VALUES = "timer_values"
     private val countdownTimerViewModel = CountdownTimerViewModel()
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {

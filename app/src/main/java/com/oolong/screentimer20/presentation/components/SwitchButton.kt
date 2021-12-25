@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 fun SwitchButtonWithText(
     text: String,
     initialStatus: Boolean,
+    enabled: Boolean,
     onStatusChange: (Boolean) -> Unit
 ){
     var status by remember { mutableStateOf(initialStatus) }
@@ -38,6 +39,7 @@ fun SwitchButtonWithText(
         )
         Switch(
             checked = status,
+            enabled = enabled,
             onCheckedChange = {
                 status = !status
                 onStatusChange(it)
@@ -48,7 +50,7 @@ fun SwitchButtonWithText(
 @Composable
 @Preview(showBackground = true)
 fun SwitchButtonWithTextPreview(){
-    SwitchButtonWithText(text = "Text", initialStatus = true){
+    SwitchButtonWithText(text = "Text", initialStatus = true, enabled = true){
 
     }
 }
