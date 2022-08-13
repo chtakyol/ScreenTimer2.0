@@ -27,9 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.oolong.screentimer20.ui.theme.ScreenTimer20Theme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val TIMER_VALUES = "timer_values"
     private val countdownTimerViewModel = CountdownTimerViewModel()
