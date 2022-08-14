@@ -13,6 +13,6 @@ sealed class Keypad(
     object Key8: Keypad("8")
     object Key9: Keypad("9")
     object Key0: Keypad("0")
-    object KeyDelete: Keypad("x")
-    object KeyPlay: Keypad("play")
+    object KeyDelete: Keypad("98")
+    object KeyPlay: Keypad("99")
 }
