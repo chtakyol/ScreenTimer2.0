@@ -21,7 +21,10 @@ fun DurationEntryScreen(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TimeDisplay()
+        TimeDisplay(
+            hours = viewModel.state.hours.value,
+            minutes = viewModel.state.minutes.value
+        )
         Spacer(modifier = Modifier.size(48.dp))
         Keypad {
             viewModel.onEvent(

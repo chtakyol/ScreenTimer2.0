@@ -26,6 +26,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.oolong.screentimer20.presentation.duration_entry_screen.DurationEntryScreen
 import com.oolong.screentimer20.ui.theme.ScreenTimer20Theme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -50,16 +51,18 @@ class MainActivity : ComponentActivity() {
         countdownTimerViewModel.deviceAdminActive.value = devicePolicyManager.isAdminActive(componentName)
 
         setContent {
-            ScreenTimer20Theme() {
-                navController = rememberNavController()
-                SetupNavGraph(
-                    navController = navController,
-                    viewModel = countdownTimerViewModel,
-                    audioManager = audioManager,
-                    devicePolicyManager = devicePolicyManager,
-                    componentName = componentName,
-                    activity = this
-                )
+            ScreenTimer20Theme {
+//                navController = rememberNavController()
+//                SetupNavGraph(
+//                    navController = navController,
+//                    viewModel = countdownTimerViewModel,
+//                    audioManager = audioManager,
+//                    devicePolicyManager = devicePolicyManager,
+//                    componentName = componentName,
+//                    activity = this
+//                )
+
+                DurationEntryScreen()
             }
         }
     }

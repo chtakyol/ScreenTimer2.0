@@ -1,7 +1,12 @@
 package com.oolong.screentimer20.presentation.duration_entry_screen
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+
 data class DurationEntryScreenState(
-    val hours: String = "00",
-    val minutes: String = "00",
+    var hours: MutableState<String> = mutableStateOf("00"),
+    var minutes: MutableState<String> = mutableStateOf("00"),
+    var hoursAsInt: Int = 0,
+    var timeDisplayValue: Int = 0,
     var digitState: Int  = 0
 )

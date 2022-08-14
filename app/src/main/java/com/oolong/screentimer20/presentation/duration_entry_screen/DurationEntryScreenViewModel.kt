@@ -25,22 +25,17 @@ class DurationEntryScreenViewModel @Inject constructor(
     }
 
     private fun addValue(keypad: Keypad) {
-        // 00:00
         val valueAsInt = keypad.value.toInt()
-
-        var minutesAsInt = 0
-        var hoursAsInt = 0
-
-        when (state.digitState) {
-            0 -> {
-                minutesAsInt = valueAsInt * 1
-            }
-
-            1 -> {
-                minutesAsInt = valueAsInt * 10
-            }
+        if (state.digitState < 4) {
+            state.timeDisplayValue *= 10
+            state.timeDisplayValue += valueAsInt
         }
-
-        Log.d("DurationEntry", keypad.value)
+        state.digitState++
+        state.hours.value = if (state.timeDisplayValue/100 < 10)
+            "0${(state.timeDisplayValue/100)}" else
+                "${(state.timeDisplayValue/100)}"
+        state.minutes.value = if (state.timeDisplayValue - state.timeDisplayValue/100 * 100 < 10)
+            "0${state.timeDisplayValue - state.timeDisplayValue/100 * 100}" else
+                "${(state.timeDisplayValue - state.timeDisplayValue/100 * 100)}"
     }
 }
