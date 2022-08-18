@@ -5,23 +5,33 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.oolong.screentimer20.domain.IDurationDataRepository
 import com.oolong.screentimer20.domain.Keypad
 import com.oolong.screentimer20.utils.getHours
 import com.oolong.screentimer20.utils.getMinutes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.delay
 
 @HiltViewModel
 class DurationEntryScreenViewModel @Inject constructor(
-
+    private val durationDataRepository: IDurationDataRepository
 ): ViewModel() {
 
     private var _uiState = mutableStateOf(DurationEntryScreenState())
     val uiState: State<DurationEntryScreenState> = _uiState
 
     val validationState = MutableSharedFlow<DurationScreenValidationEvent>()
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(300L)
+            loadDurationData()
+        }
+    }
 
     fun onEvent(event: DurationEntryScreenEvent) {
         when (event) {
@@ -32,6 +42,7 @@ class DurationEntryScreenViewModel @Inject constructor(
                     }
                     Keypad.KeyPlay -> {
                         viewModelScope.launch {
+                            updateDurationData()
                             validationState.emit(
                                 DurationScreenValidationEvent.Success
                             )
@@ -71,5 +82,30 @@ class DurationEntryScreenViewModel @Inject constructor(
                 digitState = _uiState.value.digitState
             )
         }
+    }
+
+    private suspend fun updateDurationData() {
+        durationDataRepository.updateDurationData(
+            _uiState.value.timeDisplayValue,
+            _uiState.value.digitState,
+            onSuccess = {},
+            onError = {}
+        )
+    }
+
+    private suspend fun loadDurationData() {
+        durationDataRepository.getDurationData(
+            onSuccess = {
+                _uiState.value.timeDisplayValue = it.timeDisplayValue
+                _uiState.value = _uiState.value.copy(
+                    hours = _uiState.value.timeDisplayValue.getHours(),
+                    minutes = _uiState.value.timeDisplayValue.getMinutes(),
+                    timeDisplayValue = _uiState.value.timeDisplayValue,
+                    digitState = it.digitState
+                )
+            },
+            onError = {}
+        )
+
     }
 }
