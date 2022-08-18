@@ -1,13 +1,16 @@
 package com.oolong.screentimer20.presentation.duration_entry_screen
 
-import androidx.compose.runtime.getValue
+import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.oolong.screentimer20.domain.Keypad
 import com.oolong.screentimer20.utils.getHours
 import com.oolong.screentimer20.utils.getMinutes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,7 +18,10 @@ class DurationEntryScreenViewModel @Inject constructor(
 
 ): ViewModel() {
 
-    var state by mutableStateOf(DurationEntryScreenState())
+    private var _uiState = mutableStateOf(DurationEntryScreenState())
+    val uiState: State<DurationEntryScreenState> = _uiState
+
+    val validationState = MutableSharedFlow<DurationScreenValidationEvent>()
 
     fun onEvent(event: DurationEntryScreenEvent) {
         when (event) {
@@ -25,7 +31,11 @@ class DurationEntryScreenViewModel @Inject constructor(
                         deleteValue()
                     }
                     Keypad.KeyPlay -> {
-
+                        viewModelScope.launch {
+                            validationState.emit(
+                                DurationScreenValidationEvent.Success
+                            )
+                        }
                     }
                     else -> {
                         addValue(event.value)
@@ -36,22 +46,30 @@ class DurationEntryScreenViewModel @Inject constructor(
     }
 
     private fun addValue(keypad: Keypad) {
-        if (state.digitState < 4) {
+        if (_uiState.value.digitState < 4) {
             val valueAsInt = keypad.value.toInt()
-            state.timeDisplayValue *= 10
-            state.timeDisplayValue += valueAsInt
-            state.hours.value = state.timeDisplayValue.getHours()
-            state.minutes.value = state.timeDisplayValue.getMinutes()
-            state.digitState++
+            _uiState.value.timeDisplayValue  *= 10
+            _uiState.value.timeDisplayValue += valueAsInt
+            _uiState.value.digitState++
+            _uiState.value = _uiState.value.copy(
+                hours = _uiState.value.timeDisplayValue.getHours(),
+                minutes = _uiState.value.timeDisplayValue.getMinutes(),
+                timeDisplayValue = _uiState.value.timeDisplayValue,
+                digitState = _uiState.value.digitState
+            )
         }
     }
 
     private fun deleteValue() {
-        if (state.digitState > 0) {
-            state.timeDisplayValue = state.timeDisplayValue / 10
-            state.hours.value = state.timeDisplayValue.getHours()
-            state.minutes.value = state.timeDisplayValue.getMinutes()
-            state.digitState--
+        if (_uiState.value.digitState > 0) {
+            _uiState.value.timeDisplayValue = _uiState.value.timeDisplayValue / 10
+            _uiState.value.digitState--
+            _uiState.value = _uiState.value.copy(
+                hours = _uiState.value.timeDisplayValue.getHours(),
+                minutes = _uiState.value.timeDisplayValue.getMinutes(),
+                timeDisplayValue = _uiState.value.timeDisplayValue,
+                digitState = _uiState.value.digitState
+            )
         }
     }
 }
