@@ -25,11 +25,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.oolong.screentimer20.presentation.countdown_screen.CountdownScreen
+import com.oolong.screentimer20.presentation.duration_entry_screen.DurationEntryScreen
 import com.oolong.screentimer20.ui.theme.ScreenTimer20Theme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val TIMER_VALUES = "timer_values"
     private val countdownTimerViewModel = CountdownTimerViewModel()
@@ -38,7 +43,7 @@ class MainActivity : ComponentActivity() {
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lateinit var navController: NavHostController
+//        lateinit var navController: NavHostController
         Log.d("Lifecycles", "onCreateCalled")
 
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
@@ -49,16 +54,29 @@ class MainActivity : ComponentActivity() {
         countdownTimerViewModel.deviceAdminActive.value = devicePolicyManager.isAdminActive(componentName)
 
         setContent {
-            ScreenTimer20Theme() {
-                navController = rememberNavController()
-                SetupNavGraph(
+            ScreenTimer20Theme {
+                val navController = rememberNavController()
+
+                NavHost(
                     navController = navController,
-                    viewModel = countdownTimerViewModel,
-                    audioManager = audioManager,
-                    devicePolicyManager = devicePolicyManager,
-                    componentName = componentName,
-                    activity = this
-                )
+                    startDestination = Screen.DurationEntryScreen.route
+                ) {
+                    composable(
+                        route = Screen.DurationEntryScreen.route
+                    ) {
+                        DurationEntryScreen(
+                            navController = navController
+                        )
+                    }
+
+                    composable(
+                        route = Screen.CountdownScreen.route
+                    ) {
+                        CountdownScreen(
+                            navController = navController
+                        )
+                    }
+                }
             }
         }
     }
