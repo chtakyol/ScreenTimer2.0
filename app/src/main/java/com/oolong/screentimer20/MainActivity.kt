@@ -5,6 +5,7 @@ import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
@@ -24,27 +25,37 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.oolong.screentimer20.presentation.countdown_screen.CountdownScreen
 import com.oolong.screentimer20.presentation.duration_entry_screen.DurationEntryScreen
+import com.oolong.screentimer20.services.ScreenTimerServiceBroadcastReceiver
 import com.oolong.screentimer20.ui.theme.ScreenTimer20Theme
+import com.oolong.screentimer20.utils.Constants.APP_PACKAGE_NAME
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val screenTimerServiceBroadcastReceiver = ScreenTimerServiceBroadcastReceiver()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         val devicePolicyManager = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
         val componentName = ComponentName(this, DeviceAdmin::class.java)
+
+        val screenTimerIntentFilter = IntentFilter(APP_PACKAGE_NAME)
+        this.registerReceiver(screenTimerServiceBroadcastReceiver, screenTimerIntentFilter)
+
         setContent {
             ScreenTimer20Theme {
                 val navController = rememberNavController()
+                val context = LocalContext.current
 
                 NavHost(
                     navController = navController,
@@ -62,12 +73,24 @@ class MainActivity : ComponentActivity() {
                         route = Screen.CountdownScreen.route
                     ) {
                         CountdownScreen(
+                            context = LocalContext.current,
+                            screenTimerServiceBroadcastReceiver = screenTimerServiceBroadcastReceiver,
                             navController = navController
                         )
                     }
                 }
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(screenTimerServiceBroadcastReceiver)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(screenTimerServiceBroadcastReceiver)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

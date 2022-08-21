@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oolong.screentimer20.domain.IDurationDataRepository
 import com.oolong.screentimer20.domain.Keypad
-import com.oolong.screentimer20.utils.getHours
-import com.oolong.screentimer20.utils.getMinutes
+import com.oolong.screentimer20.utils.getHoursForTimeDisplay
+import com.oolong.screentimer20.utils.getMinutesForTimeDisplay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -63,8 +63,8 @@ class DurationEntryScreenViewModel @Inject constructor(
             _uiState.value.timeDisplayValue += valueAsInt
             _uiState.value.digitState++
             _uiState.value = _uiState.value.copy(
-                hours = _uiState.value.timeDisplayValue.getHours(),
-                minutes = _uiState.value.timeDisplayValue.getMinutes(),
+                hours = _uiState.value.timeDisplayValue.getHoursForTimeDisplay(),
+                minutes = _uiState.value.timeDisplayValue.getMinutesForTimeDisplay(),
                 timeDisplayValue = _uiState.value.timeDisplayValue,
                 digitState = _uiState.value.digitState
             )
@@ -76,18 +76,22 @@ class DurationEntryScreenViewModel @Inject constructor(
             _uiState.value.timeDisplayValue = _uiState.value.timeDisplayValue / 10
             _uiState.value.digitState--
             _uiState.value = _uiState.value.copy(
-                hours = _uiState.value.timeDisplayValue.getHours(),
-                minutes = _uiState.value.timeDisplayValue.getMinutes(),
+                hours = _uiState.value.timeDisplayValue.getHoursForTimeDisplay(),
+                minutes = _uiState.value.timeDisplayValue.getMinutesForTimeDisplay(),
                 timeDisplayValue = _uiState.value.timeDisplayValue,
                 digitState = _uiState.value.digitState
             )
         }
     }
-
     private suspend fun updateDurationData() {
+        val hours = _uiState.value.timeDisplayValue / 100
+        val minutes = _uiState.value.timeDisplayValue % 100
+        val durationAsMin = hours * 60 + minutes
+        Log.d("DurationEntry", minutes.toString())
         durationDataRepository.updateDurationData(
             _uiState.value.timeDisplayValue,
             _uiState.value.digitState,
+            durationAsMin,
             onSuccess = {},
             onError = {}
         )
@@ -98,8 +102,8 @@ class DurationEntryScreenViewModel @Inject constructor(
             onSuccess = {
                 _uiState.value.timeDisplayValue = it.timeDisplayValue
                 _uiState.value = _uiState.value.copy(
-                    hours = _uiState.value.timeDisplayValue.getHours(),
-                    minutes = _uiState.value.timeDisplayValue.getMinutes(),
+                    hours = _uiState.value.timeDisplayValue.getHoursForTimeDisplay(),
+                    minutes = _uiState.value.timeDisplayValue.getMinutesForTimeDisplay(),
                     timeDisplayValue = _uiState.value.timeDisplayValue,
                     digitState = it.digitState
                 )

@@ -1,6 +1,5 @@
 package com.oolong.screentimer20.presentation.duration_entry_screen
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,9 +18,6 @@ import androidx.navigation.compose.rememberNavController
 import com.oolong.screentimer20.Screen
 import com.oolong.screentimer20.presentation.components.TimeDisplay
 import com.oolong.screentimer20.presentation.duration_entry_screen.components.Keypad
-import com.oolong.screentimer20.utils.getHours
-import com.oolong.screentimer20.utils.getMinutes
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun DurationEntryScreen(

@@ -12,10 +12,10 @@ import java.io.OutputStream
 
 internal val Context.durationDataDataStore: DataStore<DurationData> by dataStore(
     fileName = "duration_data.pb",
-    serializer = StatisticsSerializer
+    serializer = DurationDataSerializer
 )
 
-private object StatisticsSerializer: Serializer<DurationData> {
+private object DurationDataSerializer: Serializer<DurationData> {
     override val defaultValue: DurationData = DurationData.getDefaultInstance()
 
     override suspend fun readFrom(input: InputStream): DurationData {

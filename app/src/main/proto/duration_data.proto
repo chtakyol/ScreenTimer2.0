@@ -6,4 +6,5 @@ option java_multiple_files = true;
 message DurationData {
   int32 time_display_value = 1;
   int32 digit = 2;
+  int32 duration = 3;
 }
