@@ -1,5 +1,7 @@
 package com.oolong.screentimer20.domain
 
+import com.oolong.screentimer20.domain.model.DurationDataModel
+
 interface IDurationDataRepository {
 
     suspend fun getDurationData(

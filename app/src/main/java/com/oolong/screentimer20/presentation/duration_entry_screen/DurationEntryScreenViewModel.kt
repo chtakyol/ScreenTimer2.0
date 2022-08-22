@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.oolong.screentimer20.domain.IAppUtilityDataRepository
 import com.oolong.screentimer20.domain.IDurationDataRepository
 import com.oolong.screentimer20.domain.Keypad
 import com.oolong.screentimer20.utils.getHoursForTimeDisplay
@@ -18,7 +19,8 @@ import kotlinx.coroutines.delay
 
 @HiltViewModel
 class DurationEntryScreenViewModel @Inject constructor(
-    private val durationDataRepository: IDurationDataRepository
+    private val durationDataRepository: IDurationDataRepository,
+    private val appUtilityDataRepository: IAppUtilityDataRepository
 ): ViewModel() {
 
     private var _uiState = mutableStateOf(DurationEntryScreenState())
@@ -110,6 +112,5 @@ class DurationEntryScreenViewModel @Inject constructor(
             },
             onError = {}
         )
-
     }
 }

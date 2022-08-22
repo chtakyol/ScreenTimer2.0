@@ -1,4 +1,4 @@
-package com.oolong.screentimer20.domain
+package com.oolong.screentimer20.domain.model
 
 data class DurationDataModel(
     val timeDisplayValue: Int = 0,
