@@ -10,7 +10,7 @@ interface IAppUtilityDataRepository {
 
     suspend fun updateAppUtilityData(
         numberOfRunning: Int,
-        isCountdownTimerIsRunning: Boolean,
+        isCountdownTimerRunning: Boolean,
         onSuccess: (isRecord: Boolean) -> Unit,
         onError: (Exception) -> Unit
     )

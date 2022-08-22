@@ -17,10 +17,6 @@ internal val Context.durationDataDataStore: DataStore<DurationData> by dataStore
 )
 
 private object DurationDataSerializer: Serializer<DurationData> {
-    serializer = StatisticsSerializer
-)
-
-private object StatisticsSerializer: Serializer<DurationData> {
     override val defaultValue: DurationData = DurationData.getDefaultInstance()
 
     override suspend fun readFrom(input: InputStream): DurationData {
