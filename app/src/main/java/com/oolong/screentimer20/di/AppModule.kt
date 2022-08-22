@@ -1,8 +1,12 @@
 package com.oolong.screentimer20.di
 
 import android.content.Context
+import com.oolong.screentimer20.data.LocalAppUtilityDataRepositoryImpl
 import com.oolong.screentimer20.data.LocalDurationDataRepositoryImpl
+import com.oolong.screentimer20.data.appUtilityData
 import com.oolong.screentimer20.data.durationDataDataStore
+import com.oolong.screentimer20.domain.IAppUtilityDataRepository
+
 import com.oolong.screentimer20.domain.IDurationDataRepository
 import dagger.Module
 import dagger.Provides
@@ -20,4 +24,10 @@ object AppModule {
     fun provideDurationData(
         @ApplicationContext app: Context
     ): IDurationDataRepository = LocalDurationDataRepositoryImpl(app.durationDataDataStore)
+
+    @Singleton
+    @Provides
+    fun provideAppUtilityData(
+        @ApplicationContext app: Context
+    ): IAppUtilityDataRepository = LocalAppUtilityDataRepositoryImpl(app.appUtilityData)
 }
