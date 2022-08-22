@@ -6,6 +6,7 @@ import com.oolong.screentimer20.data.LocalDurationDataRepositoryImpl
 import com.oolong.screentimer20.data.appUtilityData
 import com.oolong.screentimer20.data.durationDataDataStore
 import com.oolong.screentimer20.domain.IAppUtilityDataRepository
+
 import com.oolong.screentimer20.domain.IDurationDataRepository
 import dagger.Module
 import dagger.Provides
