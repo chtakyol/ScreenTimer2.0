@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.oolong.screentimer20.domain.IAppUtilityDataRepository
 import com.oolong.screentimer20.domain.IDurationDataRepository
 import com.oolong.screentimer20.domain.Keypad
+import com.oolong.screentimer20.domain.model.AppUtilityData
 import com.oolong.screentimer20.utils.getHoursForTimeDisplay
 import com.oolong.screentimer20.utils.getMinutesForTimeDisplay
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,11 +27,15 @@ class DurationEntryScreenViewModel @Inject constructor(
     private var _uiState = mutableStateOf(DurationEntryScreenState())
     val uiState: State<DurationEntryScreenState> = _uiState
 
+    private val appUtilityData = AppUtilityData()
+
     val validationState = MutableSharedFlow<DurationScreenValidationEvent>()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             delay(300L)
+            loadAppUtilityData()
+            Log.d("DurationEntryScreen", "is timer running ${appUtilityData.isCountdownTimerRunning}")
             loadDurationData()
         }
     }
@@ -45,6 +50,7 @@ class DurationEntryScreenViewModel @Inject constructor(
                     Keypad.KeyPlay -> {
                         viewModelScope.launch {
                             updateDurationData()
+                            updateAppUtilityData(true)
                             validationState.emit(
                                 DurationScreenValidationEvent.Success
                             )
@@ -109,6 +115,27 @@ class DurationEntryScreenViewModel @Inject constructor(
                     timeDisplayValue = _uiState.value.timeDisplayValue,
                     digitState = it.digitState
                 )
+            },
+            onError = {}
+        )
+    }
+
+    private suspend fun updateAppUtilityData(
+        isCountdownTimerRunning: Boolean
+    ) {
+        appUtilityDataRepository.updateAppUtilityData(
+            numberOfRunning = appUtilityData.numberOfRunning + 1,
+            isCountdownTimerRunning = isCountdownTimerRunning,
+            onSuccess = {},
+            onError = {}
+        )
+    }
+
+    private suspend fun loadAppUtilityData() {
+        appUtilityDataRepository.getAppUtilityData(
+            onSuccess = {
+                appUtilityData.numberOfRunning = it.numberOfRunning
+                appUtilityData.isCountdownTimerRunning = it.isCountdownTimerRunning
             },
             onError = {}
         )

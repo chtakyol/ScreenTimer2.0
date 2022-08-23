@@ -47,6 +47,7 @@ class ScreenTimerService: Service() {
                 }
                 ACTION_STOP_SERVICE -> {
                     Log.d("ScreenTimerService", "Screen Timer Service Stop")
+                    countDownTimer.cancel()
                 }
                 ACTION_ADD_BUTTON -> {
                 }
@@ -55,7 +56,7 @@ class ScreenTimerService: Service() {
                 }
             }
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -88,7 +89,10 @@ class ScreenTimerService: Service() {
                     )
                 }
                 sendScreenTimerServiceTickBroadcast(duration)
-                if (duration == 0) countDownTimer.cancel()
+                if (duration == 0){
+                    countDownTimer.cancel()
+                    countDownTimer.onFinish()
+                }
             }
 
             override fun onFinish() {

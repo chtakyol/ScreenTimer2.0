@@ -30,6 +30,15 @@ internal fun Context.startScreenTimerService(
     }
 }
 
+internal fun Context.stopScreenTimerService(
+    action: String
+) {
+    Intent(this, ScreenTimerService::class.java).also {
+        it.action = action
+        startService(it)
+    }
+}
+
 internal fun Context.sendScreenTimerServiceTickBroadcast(
     durationData: Int
 ) {
