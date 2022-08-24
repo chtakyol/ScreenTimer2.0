@@ -26,10 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.oolong.screentimer20.presentation.SplashScreen
 import com.oolong.screentimer20.presentation.countdown_screen.CountdownScreen
 import com.oolong.screentimer20.presentation.duration_entry_screen.DurationEntryScreen
 import com.oolong.screentimer20.services.ScreenTimerServiceBroadcastReceiver
@@ -53,14 +55,20 @@ class MainActivity : ComponentActivity() {
         this.registerReceiver(screenTimerServiceBroadcastReceiver, screenTimerIntentFilter)
 
         setContent {
+            val navController = rememberNavController()
             ScreenTimer20Theme {
-                val navController = rememberNavController()
-                val context = LocalContext.current
-
                 NavHost(
                     navController = navController,
-                    startDestination = Screen.DurationEntryScreen.route
+                    startDestination = Screen.SplashScreen.route
                 ) {
+                    composable(
+                        route = Screen.SplashScreen.route
+                    ) {
+                        SplashScreen(
+                            navController = navController
+                        )
+                    }
+
                     composable(
                         route = Screen.DurationEntryScreen.route
                     ) {
@@ -90,7 +98,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
-        unregisterReceiver(screenTimerServiceBroadcastReceiver)
+        try {
+            unregisterReceiver(screenTimerServiceBroadcastReceiver)
+        } catch (e: Exception) {
+//            throw(e)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

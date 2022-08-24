@@ -7,11 +7,15 @@ import android.os.CountDownTimer
 import android.os.IBinder
 import android.util.Log
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.oolong.screentimer20.domain.IDurationDataRepository
 import com.oolong.screentimer20.utils.Constants.ACTION_ADD_BUTTON
 import com.oolong.screentimer20.utils.Constants.ACTION_PAUSE_SERVICE
 import com.oolong.screentimer20.utils.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.oolong.screentimer20.utils.Constants.ACTION_STOP_SERVICE
+import com.oolong.screentimer20.utils.getHours
+import com.oolong.screentimer20.utils.getMinutes
 import com.oolong.screentimer20.utils.sendScreenTimerServiceTickBroadcast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +29,12 @@ class ScreenTimerService: Service() {
 
     @Inject
     lateinit var durationDataRepository: IDurationDataRepository
+
+    @Inject
+    lateinit var notificationBuilder: NotificationCompat.Builder
+
+    @Inject
+    lateinit var notificationManager: NotificationManagerCompat
 
     private lateinit var countDownTimer: CountDownTimer
 
@@ -40,6 +50,7 @@ class ScreenTimerService: Service() {
                         Log.d("ScreenTimerService", "Screen Timer Service Start")
                         configureTimerValues()
                         startTimer()
+                        showNotification()
                     }
                 }
                 ACTION_PAUSE_SERVICE -> {
@@ -47,6 +58,7 @@ class ScreenTimerService: Service() {
                 }
                 ACTION_STOP_SERVICE -> {
                     Log.d("ScreenTimerService", "Screen Timer Service Stop")
+                    countDownTimer.cancel()
                 }
                 ACTION_ADD_BUTTON -> {
                 }
@@ -55,11 +67,28 @@ class ScreenTimerService: Service() {
                 }
             }
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
     override fun onBind(p0: Intent?): IBinder? {
         TODO("Not yet implemented")
+    }
+
+    private fun getNotificationContent(duration: Int): String {
+        return "Your screen will be lock in: ${duration.getHours()}:${duration.getMinutes()}."
+    }
+
+    private fun updateNotification(content: String) {
+        notificationManager.notify(
+            1,
+            notificationBuilder
+                .setContentText(content)
+                .build()
+        )
+    }
+
+    private fun showNotification() {
+        notificationManager.notify(1, notificationBuilder.build())
     }
 
     private suspend fun configureTimerValues() {
@@ -87,8 +116,13 @@ class ScreenTimerService: Service() {
                         onError = {}
                     )
                 }
+                val notificationContent = getNotificationContent(duration)
+                updateNotification(notificationContent)
                 sendScreenTimerServiceTickBroadcast(duration)
-                if (duration == 0) countDownTimer.cancel()
+                if (duration == 0){
+                    countDownTimer.cancel()
+                    countDownTimer.onFinish()
+                }
             }
 
             override fun onFinish() {
