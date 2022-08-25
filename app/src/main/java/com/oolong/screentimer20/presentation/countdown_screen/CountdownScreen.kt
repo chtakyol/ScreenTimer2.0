@@ -34,7 +34,6 @@ fun CountdownScreen(
     viewModel: CountdownScreenViewModel = hiltViewModel(),
     navController: NavController = rememberNavController(),
 ) {
-
     val durationDataFromBroadcast = screenTimerServiceBroadcastReceiver.getDurationData()
 
     LaunchedEffect(key1 = context) {
@@ -46,7 +45,6 @@ fun CountdownScreen(
                 }
                 is CountdownScreenValidationEvent.Idle -> { }
                 is CountdownScreenValidationEvent.StopService -> {
-                    Log.d("CountdownScreen", "asd")
                     context.stopScreenTimerService(ACTION_STOP_SERVICE)
                     navController.navigate(Screen.DurationEntryScreen.route)
                 }

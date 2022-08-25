@@ -35,7 +35,6 @@ class DurationEntryScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             delay(300L)
             loadAppUtilityData()
-            Log.d("DurationEntryScreen", "is timer running ${appUtilityData.isCountdownTimerRunning}")
             loadDurationData()
         }
     }
@@ -95,7 +94,6 @@ class DurationEntryScreenViewModel @Inject constructor(
         val hours = _uiState.value.timeDisplayValue / 100
         val minutes = _uiState.value.timeDisplayValue % 100
         val durationAsMin = hours * 60 + minutes
-        Log.d("DurationEntry", minutes.toString())
         durationDataRepository.updateDurationData(
             _uiState.value.timeDisplayValue,
             _uiState.value.digitState,

@@ -44,15 +44,13 @@ class CountdownScreenViewModel @Inject constructor(
     fun onEvent(event: CountdownScreenEvent) {
         when(event) {
             is CountdownScreenEvent.OnCancelButtonPressed -> {
-                Log.d("CountdownScreen", "isTimerRunning: ${appUtilityData.isCountdownTimerRunning}")
                 viewModelScope.launch {
+                    updateAppUtilityData()
                     val s = validationState.tryEmit(
                         if (appUtilityData.isCountdownTimerRunning) CountdownScreenValidationEvent.StopService else CountdownScreenValidationEvent.Idle
                     )
-                    Log.d("CountdownScreen", "succ: ${s}")
-
                 }
-                updateAppUtilityData()
+
             }
         }
     }
