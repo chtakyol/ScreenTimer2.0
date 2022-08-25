@@ -24,6 +24,8 @@ import com.oolong.screentimer20.utils.getHours
 import com.oolong.screentimer20.utils.getMinutes
 import com.oolong.screentimer20.utils.startScreenTimerService
 import com.oolong.screentimer20.utils.stopScreenTimerService
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.drop
 
 @Composable
 fun CountdownScreen(
@@ -36,12 +38,17 @@ fun CountdownScreen(
     val durationDataFromBroadcast = screenTimerServiceBroadcastReceiver.getDurationData()
 
     LaunchedEffect(key1 = context) {
-        viewModel.validationState.collect { event ->
+        viewModel.validationState.collectLatest { event ->
             when(event) {
                 is CountdownScreenValidationEvent.StartService -> {
-                    Log.d("CountdownScreen", "asd")
                     context.startScreenTimerService(ACTION_START_OR_RESUME_SERVICE)
                     viewModel.validationState.emit(CountdownScreenValidationEvent.Idle)
+                }
+                is CountdownScreenValidationEvent.Idle -> { }
+                is CountdownScreenValidationEvent.StopService -> {
+                    Log.d("CountdownScreen", "asd")
+                    context.stopScreenTimerService(ACTION_STOP_SERVICE)
+                    navController.navigate(Screen.DurationEntryScreen.route)
                 }
             }
         }
@@ -69,9 +76,7 @@ fun CountdownScreen(
             Spacer(modifier = Modifier.size(54.dp))
 
             StopButton {
-                viewModel.updateAppUtilityData()
-                navController.navigate(Screen.DurationEntryScreen.route)
-                context.stopScreenTimerService(ACTION_STOP_SERVICE)
+                viewModel.onEvent(CountdownScreenEvent.OnCancelButtonPressed)
             }
         }
     }
