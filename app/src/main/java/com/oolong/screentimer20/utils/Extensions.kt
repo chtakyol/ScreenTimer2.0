@@ -1,7 +1,15 @@
 package com.oolong.screentimer20.utils
 
+import android.app.Activity
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Context.DEVICE_POLICY_SERVICE
 import android.content.Intent
+import android.os.Parcel
+import androidx.activity.ComponentActivity
+import com.oolong.screentimer20.R
+import com.oolong.screentimer20.device_administration.ScreenTimerDeviceAdminReceiver
 import com.oolong.screentimer20.services.ScreenTimerService
 import com.oolong.screentimer20.utils.Constants.APP_PACKAGE_NAME
 
@@ -46,4 +54,24 @@ internal fun Context.sendScreenTimerServiceTickBroadcast(
         it.putExtra("Duration", durationData)
         sendBroadcast(it)
     }
+}
+
+internal fun Context.getComponentName(): ComponentName {
+    return ComponentName(this, ScreenTimerDeviceAdminReceiver::class.java)
+}
+
+internal fun Context.devicePolicyManagerIntent(): Intent {
+    val componentName = this.getComponentName()
+    return Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).also {
+        it.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
+        it.putExtra(
+            DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+            R.string.device_manager_explanation
+        )
+    }
+}
+
+internal fun Context.lockDevice() {
+    val devicePolicyManager = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
+    if (devicePolicyManager.isAdminActive(this.getComponentName())) devicePolicyManager.lockNow()
 }

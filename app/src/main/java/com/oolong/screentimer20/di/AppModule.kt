@@ -30,4 +30,8 @@ object AppModule {
     fun provideAppUtilityData(
         @ApplicationContext app: Context
     ): IAppUtilityDataRepository = LocalAppUtilityDataRepositoryImpl(app.appUtilityData)
+
+//    @Singleton
+//    @Provides
+//    fun provide
 }
