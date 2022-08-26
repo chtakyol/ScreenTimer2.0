@@ -22,13 +22,14 @@ fun SplashScreen(
         viewModel.splashScreenNavigationEvent.collect { event ->
             when(event) {
                 SplashScreenNavigationEvent.NavigateToCountdownScreen -> {
-//                    navController.navigate(Screen.CountdownScreen.route)
-                    navController.navigate(Screen.DeviceAdminActivationScreen.route)
+                    navController.navigate(Screen.CountdownScreen.route)
 
                 }
                 SplashScreenNavigationEvent.NavigateToDurationEntryScreen -> {
-//                    navController.navigate(Screen.DurationEntryScreen.route)
-                    navController.navigate(Screen.DeviceAdminActivationScreen.route)
+                    navController.navigate(Screen.DurationEntryScreen.route)
+                }
+                SplashScreenNavigationEvent.NavigateToOnboardingScreen -> {
+                    navController.navigate(Screen.OnboardingScreen.route)
                 }
             }
         }

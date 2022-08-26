@@ -26,10 +26,14 @@ class SplashScreenViewModel @Inject constructor(
             delay(200L)
             loadAppUtilityData()
             Log.d("SplashScreen", appUtilityData.isCountdownTimerRunning.toString())
-            if (appUtilityData.isCountdownTimerRunning) {
-                splashScreenNavigationEvent.emit(SplashScreenNavigationEvent.NavigateToCountdownScreen)
+            if (appUtilityData.numberOfRunning == 0) {
+                splashScreenNavigationEvent.emit(SplashScreenNavigationEvent.NavigateToOnboardingScreen)
             } else {
-                splashScreenNavigationEvent.emit(SplashScreenNavigationEvent.NavigateToDurationEntryScreen)
+                if (appUtilityData.isCountdownTimerRunning) {
+                    splashScreenNavigationEvent.emit(SplashScreenNavigationEvent.NavigateToCountdownScreen)
+                } else {
+                    splashScreenNavigationEvent.emit(SplashScreenNavigationEvent.NavigateToDurationEntryScreen)
+                }
             }
         }
     }

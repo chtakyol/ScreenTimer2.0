@@ -10,10 +10,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.oolong.screentimer20.presentation.SplashScreen
 import com.oolong.screentimer20.presentation.countdown_screen.CountdownScreen
 import com.oolong.screentimer20.presentation.duration_entry_screen.DurationEntryScreen
 import com.oolong.screentimer20.presentation.device_admin_activation_screen.LandingScreen
+import com.oolong.screentimer20.presentation.onboarding_screen.OnboardingScreen
 import com.oolong.screentimer20.services.ScreenTimerServiceBroadcastReceiver
 import com.oolong.screentimer20.ui.theme.ScreenTimer20Theme
 import com.oolong.screentimer20.utils.Constants.APP_PACKAGE_NAME
@@ -24,6 +26,7 @@ class MainActivity : ComponentActivity() {
 
     private val screenTimerServiceBroadcastReceiver = ScreenTimerServiceBroadcastReceiver()
 
+    @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,6 +45,14 @@ class MainActivity : ComponentActivity() {
                         route = Screen.SplashScreen.route
                     ) {
                         SplashScreen(
+                            navController = navController
+                        )
+                    }
+
+                    composable(
+                        route = Screen.OnboardingScreen.route
+                    ) {
+                        OnboardingScreen(
                             navController = navController
                         )
                     }
