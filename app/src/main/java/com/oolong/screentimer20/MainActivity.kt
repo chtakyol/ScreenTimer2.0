@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.oolong.screentimer20.presentation.SplashScreen
+import com.oolong.screentimer20.presentation.splash_screen.SplashScreen
 import com.oolong.screentimer20.presentation.countdown_screen.CountdownScreen
 import com.oolong.screentimer20.presentation.duration_entry_screen.DurationEntryScreen
 import com.oolong.screentimer20.presentation.device_admin_activation_screen.LandingScreen

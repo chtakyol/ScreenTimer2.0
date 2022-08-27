@@ -1,6 +1,5 @@
 package com.oolong.screentimer20.presentation.device_admin_activation_screen
 
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -22,7 +21,6 @@ fun LandingScreen(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         result.data
-        Log.d("LandingScreen", result.data.toString())
     }
 
     DefaultLandingComponent(

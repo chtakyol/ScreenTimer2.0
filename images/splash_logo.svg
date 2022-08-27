@@ -1,0 +1,14 @@
+<svg width="270" height="270" viewBox="0 0 270 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.9">
+<rect width="270" height="270" rx="45" fill="#BB86FC"/>
+<circle cx="135" cy="135" r="104.414" fill="#383838"/>
+<circle cx="89.3847" cy="53.4967" r="5.27344" transform="rotate(-30 89.3847 53.4967)" fill="#BB86FC"/>
+<circle cx="55.6061" cy="87.2754" r="5.27344" transform="rotate(-60 55.6061 87.2754)" fill="#BB86FC"/>
+<circle cx="43.2422" cy="133.418" r="5.27344" transform="rotate(-90 43.2422 133.418)" fill="#BB86FC"/>
+<circle cx="55.6061" cy="179.561" r="5.27344" transform="rotate(-120 55.6061 179.561)" fill="#BB86FC"/>
+<circle cx="135.527" cy="41.1328" r="5.27344" fill="#BB86FC"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M98.4177 208.763C150.842 208.763 193.34 166.265 193.34 113.841C193.34 89.9779 184.534 68.1718 169.995 51.4943C168.608 49.9027 170.17 47.4327 172.121 48.2399C206.555 62.4851 230.781 96.408 230.781 135.989C230.781 188.413 188.283 230.911 135.859 230.911C113.403 230.911 92.7676 223.113 76.5141 210.077C74.867 208.756 76.2796 206.192 78.3437 206.636C84.8145 208.029 91.5304 208.763 98.4177 208.763Z" fill="#BB86FC"/>
+<line x1="136" y1="132.027" x2="136" y2="78" stroke="#BB86FC" stroke-width="14" stroke-linecap="round"/>
+<line x1="135.632" y1="132.67" x2="113.67" y2="146.739" stroke="#BB86FC" stroke-width="14" stroke-linecap="round"/>
+</g>
+</svg>
