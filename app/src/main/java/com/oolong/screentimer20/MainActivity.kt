@@ -14,7 +14,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.oolong.screentimer20.presentation.splash_screen.SplashScreen
 import com.oolong.screentimer20.presentation.countdown_screen.CountdownScreen
 import com.oolong.screentimer20.presentation.duration_entry_screen.DurationEntryScreen
-import com.oolong.screentimer20.presentation.device_admin_activation_screen.LandingScreen
+import com.oolong.screentimer20.presentation.device_admin_activation_screen.DeviceAdminActivationScreen
 import com.oolong.screentimer20.presentation.onboarding_screen.OnboardingScreen
 import com.oolong.screentimer20.services.ScreenTimerServiceBroadcastReceiver
 import com.oolong.screentimer20.ui.theme.ScreenTimer20Theme
@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = Screen.DeviceAdminActivationScreen.route
                     ) {
-                        LandingScreen(
+                        DeviceAdminActivationScreen(
                             navController = navController
                         )
                     }

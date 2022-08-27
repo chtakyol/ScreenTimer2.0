@@ -8,11 +8,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.oolong.screentimer20.Screen
+import com.oolong.screentimer20.presentation.device_admin_activation_screen.components.DeviceAdminActivationComponent
 import com.oolong.screentimer20.utils.devicePolicyManagerIntent
 import com.oolong.screentimer20.utils.lockDevice
 
 @Composable
-fun LandingScreen(
+fun DeviceAdminActivationScreen(
     navController: NavController = rememberNavController()
 ) {
     val context = LocalContext.current
@@ -23,7 +24,7 @@ fun LandingScreen(
         result.data
     }
 
-    DefaultLandingComponent(
+    DeviceAdminActivationComponent(
         onGoToButtonClick = {
             navController.navigate(
                 route = Screen.DurationEntryScreen.route
@@ -41,5 +42,5 @@ fun LandingScreen(
 @Composable
 @Preview
 fun PreviewLandingScreen() {
-    LandingScreen()
+    DeviceAdminActivationScreen()
 }

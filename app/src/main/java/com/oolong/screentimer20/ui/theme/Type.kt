@@ -13,6 +13,10 @@ val Alata = FontFamily(
     Font(R.font.alata_regular)
 )
 
+val Inter = FontFamily(
+    Font(R.font.inter_light)
+)
+
 // Set of Material typography styles to start with
 val Typography = Typography(
     body1 = TextStyle(
@@ -26,8 +30,8 @@ val Typography = Typography(
         color = Color(0xFFFFFFFF)
     ),
     h2 = TextStyle(
-        fontFamily = Alata,
-        fontSize = 32.sp,
+        fontFamily = Inter,
+        fontSize = 36.sp,
         color = Color(0xFFFFFFFF)
     )
     /* Other default text styles to override
