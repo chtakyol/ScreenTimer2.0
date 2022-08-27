@@ -33,7 +33,17 @@ val Typography = Typography(
         fontFamily = Inter,
         fontSize = 36.sp,
         color = Color(0xFFFFFFFF)
-    )
+    ),
+    h3 = TextStyle(
+        fontFamily = Inter,
+        fontSize = 64.sp,
+        color = Color(0xFFBB86FC)
+    ),
+    h4 = TextStyle(
+        fontFamily = Inter,
+        fontSize = 16.sp,
+        color = Color(0xFFBB86FC)
+    ),
     /* Other default text styles to override
     button = TextStyle(
         fontFamily = FontFamily.Default,

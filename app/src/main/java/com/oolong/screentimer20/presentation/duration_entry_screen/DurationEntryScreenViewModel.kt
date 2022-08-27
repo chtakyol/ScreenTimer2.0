@@ -27,7 +27,7 @@ class DurationEntryScreenViewModel @Inject constructor(
     private var _uiState = mutableStateOf(DurationEntryScreenState())
     val uiState: State<DurationEntryScreenState> = _uiState
 
-    private val appUtilityData = AppUtilityData()
+    val appUtilityData = AppUtilityData()
 
     val validationState = MutableSharedFlow<DurationScreenValidationEvent>()
 
