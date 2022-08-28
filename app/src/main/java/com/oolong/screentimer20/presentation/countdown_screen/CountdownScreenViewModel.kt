@@ -35,6 +35,7 @@ class CountdownScreenViewModel @Inject constructor(
             delay(100L)
             loadDurationData()
             loadAppUtilityData()
+            delay(100L)
             validationState.emit(
                 CountdownScreenValidationEvent.StartService
             )
@@ -79,10 +80,10 @@ class CountdownScreenViewModel @Inject constructor(
         )
     }
 
-    private fun updateAppUtilityData() {
+    fun updateAppUtilityData() {
         viewModelScope.launch(Dispatchers.IO) {
             appUtilityDataRepository.updateAppUtilityData(
-                numberOfRunning = appUtilityData.numberOfRunning,
+                numberOfRunning = appUtilityData.numberOfRunning + 1,
                 isCountdownTimerRunning = false,
                 onSuccess = {},
                 onError = {}

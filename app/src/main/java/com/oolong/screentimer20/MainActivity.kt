@@ -89,13 +89,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onPause() {
         super.onPause()
-        unregisterReceiver(screenTimerServiceBroadcastReceiver)
+//        unregisterReceiver(screenTimerServiceBroadcastReceiver)
     }
 
     override fun onStop() {
         super.onStop()
         try {
-            unregisterReceiver(screenTimerServiceBroadcastReceiver)
+//            unregisterReceiver(screenTimerServiceBroadcastReceiver)
         } catch (e: Exception) {
 //            throw(e)
         }

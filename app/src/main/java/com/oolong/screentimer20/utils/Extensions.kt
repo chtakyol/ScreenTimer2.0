@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Context.DEVICE_POLICY_SERVICE
 import android.content.Intent
+import android.os.Build
 import android.os.Parcel
 import androidx.activity.ComponentActivity
 import com.oolong.screentimer20.R
@@ -59,7 +60,9 @@ internal fun Context.stopScreenTimerService(
 ) {
     Intent(this, ScreenTimerService::class.java).also {
         it.action = action
-        startService(it)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(it)
+        }
     }
 }
 
@@ -90,4 +93,9 @@ internal fun Context.devicePolicyManagerIntent(): Intent {
 internal fun Context.lockDevice() {
     val devicePolicyManager = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
     if (devicePolicyManager.isAdminActive(this.getComponentName())) devicePolicyManager.lockNow()
+}
+
+internal fun Context.isScreenTimerDeviceAdmin(): Boolean {
+    val devicePolicyManager = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
+    return devicePolicyManager.isAdminActive(this.getComponentName())
 }

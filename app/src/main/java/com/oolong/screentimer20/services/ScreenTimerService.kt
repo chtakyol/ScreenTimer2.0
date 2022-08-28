@@ -16,6 +16,7 @@ import com.oolong.screentimer20.utils.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.oolong.screentimer20.utils.Constants.ACTION_STOP_SERVICE
 import com.oolong.screentimer20.utils.getHours
 import com.oolong.screentimer20.utils.getMinutes
+import com.oolong.screentimer20.utils.lockDevice
 import com.oolong.screentimer20.utils.sendScreenTimerServiceTickBroadcast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -91,8 +92,14 @@ class ScreenTimerService: Service() {
         )
     }
 
+    private fun cancelNotification() {
+        notificationManager.cancel(1)
+    }
+
     private fun showNotification() {
         notificationManager.notify(1, notificationBuilder.build())
+        val notification = notificationBuilder.build()
+        startForeground(1, notification)
     }
 
     private suspend fun configureTimerValues() {
@@ -124,6 +131,8 @@ class ScreenTimerService: Service() {
                 updateNotification(notificationContent)
                 sendScreenTimerServiceTickBroadcast(duration)
                 if (duration == 0){
+                    cancelNotification()
+                    applicationContext.lockDevice()
                     countDownTimer.cancel()
                     countDownTimer.onFinish()
                 }
