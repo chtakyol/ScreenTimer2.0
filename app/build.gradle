@@ -82,6 +82,10 @@ dependencies {
     // DataStore
     implementation "androidx.datastore:datastore:1.0.0"
     implementation  "com.google.protobuf:protobuf-javalite:3.19.4"
+
+    // Pager and Indicators - Accompanist
+    implementation "com.google.accompanist:accompanist-pager:0.24.2-alpha"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.24.2-alpha"
 }
 
 protobuf {

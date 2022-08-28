@@ -19,6 +19,9 @@ fun CircularDurationBar(
     percentage: Float = 100f
 )
 {
+    val backgroundIndicatorColor = Color(0xFF383838)
+    val foregroundIndicatorColor = Color(0xFFBB86FC)
+    // https://stackoverflow.com/questions/929103/convert-a-number-range-to-another-range-maintaining-ratio
     val oldRange = (100f - 0f)
     val newRange = (220f - 0f)
     val newValue = (((percentage - 0f) * newRange) / oldRange)
@@ -29,11 +32,13 @@ fun CircularDurationBar(
                 val componentSize = size / 1.25f
                 backgroundIndicator(
                     componentSize = componentSize,
+                    indicatorColor = backgroundIndicatorColor,
                     indicatorStrokeWidth = 90f,
                 )
                 foregroundIndicator(
                     sweepAngle = newValue,
                     componentSize = componentSize,
+                    indicatorColor = foregroundIndicatorColor,
                     indicatorStrokeWidth = 45f,
                 )
             }

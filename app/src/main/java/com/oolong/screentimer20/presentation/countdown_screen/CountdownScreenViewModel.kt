@@ -1,5 +1,6 @@
 package com.oolong.screentimer20.presentation.countdown_screen
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -27,15 +28,30 @@ class CountdownScreenViewModel @Inject constructor(
 
     private val appUtilityData = AppUtilityData()
 
-    val validationState = MutableSharedFlow<CountdownScreenValidationEvent>()
+    val validationState = MutableSharedFlow<CountdownScreenValidationEvent>( replay = 1)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             delay(100L)
             loadDurationData()
+            loadAppUtilityData()
             validationState.emit(
                 CountdownScreenValidationEvent.StartService
             )
+        }
+    }
+
+    fun onEvent(event: CountdownScreenEvent) {
+        when(event) {
+            is CountdownScreenEvent.OnCancelButtonPressed -> {
+                viewModelScope.launch {
+                    updateAppUtilityData()
+                    val s = validationState.tryEmit(
+                        if (appUtilityData.isCountdownTimerRunning) CountdownScreenValidationEvent.StopService else CountdownScreenValidationEvent.Idle
+                    )
+                }
+
+            }
         }
     }
 
@@ -53,10 +69,20 @@ class CountdownScreenViewModel @Inject constructor(
         )
     }
 
-    fun updateAppUtilityData() {
+    private suspend fun loadAppUtilityData() {
+        appUtilityDataRepository.getAppUtilityData(
+            onSuccess = {
+                appUtilityData.numberOfRunning = it.numberOfRunning
+                appUtilityData.isCountdownTimerRunning = it.isCountdownTimerRunning
+            },
+            onError = {}
+        )
+    }
+
+    private fun updateAppUtilityData() {
         viewModelScope.launch(Dispatchers.IO) {
             appUtilityDataRepository.updateAppUtilityData(
-                numberOfRunning = 0,
+                numberOfRunning = appUtilityData.numberOfRunning,
                 isCountdownTimerRunning = false,
                 onSuccess = {},
                 onError = {}

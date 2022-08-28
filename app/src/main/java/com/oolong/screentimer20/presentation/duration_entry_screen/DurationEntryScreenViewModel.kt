@@ -27,7 +27,7 @@ class DurationEntryScreenViewModel @Inject constructor(
     private var _uiState = mutableStateOf(DurationEntryScreenState())
     val uiState: State<DurationEntryScreenState> = _uiState
 
-    private val appUtilityData = AppUtilityData()
+    val appUtilityData = AppUtilityData()
 
     val validationState = MutableSharedFlow<DurationScreenValidationEvent>()
 
@@ -35,7 +35,6 @@ class DurationEntryScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             delay(300L)
             loadAppUtilityData()
-            Log.d("DurationEntryScreen", "is timer running ${appUtilityData.isCountdownTimerRunning}")
             loadDurationData()
         }
     }
@@ -95,7 +94,6 @@ class DurationEntryScreenViewModel @Inject constructor(
         val hours = _uiState.value.timeDisplayValue / 100
         val minutes = _uiState.value.timeDisplayValue % 100
         val durationAsMin = hours * 60 + minutes
-        Log.d("DurationEntry", minutes.toString())
         durationDataRepository.updateDurationData(
             _uiState.value.timeDisplayValue,
             _uiState.value.digitState,

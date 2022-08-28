@@ -58,7 +58,11 @@ class ScreenTimerService: Service() {
                 }
                 ACTION_STOP_SERVICE -> {
                     Log.d("ScreenTimerService", "Screen Timer Service Stop")
-                    countDownTimer.cancel()
+                    if (duration > 0) {
+                        countDownTimer.cancel()
+                    } else {
+
+                    }
                 }
                 ACTION_ADD_BUTTON -> {
                 }
