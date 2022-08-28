@@ -29,6 +29,22 @@ internal fun Int.getMinutes(): String {
     return if (this % 60< 10) "0${(this % 60)}" else "${(this % 60)}"
 }
 
+internal fun Int.getPercentage(
+    oldMin:Int = 0,
+    oldMax: Int,
+
+): Float {
+//    OldRange = (OldMax - OldMin)
+//    NewRange = (NewMax - NewMin)
+//    NewValue = (((OldValue - OldMin) * NewRange) / OldRange) + NewMin
+    val newMax = 100
+    val newMin = 0
+    val oldRange = oldMax - oldMin
+    val newRange = newMax - newMin
+    val newValue = if (oldRange != 0) (((this - oldMin) * newRange) / oldRange) + newMin else 100
+    return newValue.toFloat()
+}
+
 internal fun Context.startScreenTimerService(
     action: String
 ) {
