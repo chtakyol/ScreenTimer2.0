@@ -90,6 +90,7 @@ class DurationEntryScreenViewModel @Inject constructor(
             )
         }
     }
+
     private suspend fun updateDurationData() {
         val hours = _uiState.value.timeDisplayValue / 100
         val minutes = _uiState.value.timeDisplayValue % 100
@@ -124,6 +125,7 @@ class DurationEntryScreenViewModel @Inject constructor(
         appUtilityDataRepository.updateAppUtilityData(
             numberOfRunning = appUtilityData.numberOfRunning + 1,
             isCountdownTimerRunning = isCountdownTimerRunning,
+            isAppRegisteredAsDeviceAdmin = appUtilityData.isAppRegisteredAsDeviceAdmin,
             onSuccess = {},
             onError = {}
         )
@@ -134,6 +136,7 @@ class DurationEntryScreenViewModel @Inject constructor(
             onSuccess = {
                 appUtilityData.numberOfRunning = it.numberOfRunning
                 appUtilityData.isCountdownTimerRunning = it.isCountdownTimerRunning
+                appUtilityData.isAppRegisteredAsDeviceAdmin = it.isAppRegisteredAsDeviceAdmin
             },
             onError = {}
         )

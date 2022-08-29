@@ -51,7 +51,6 @@ class CountdownScreenViewModel @Inject constructor(
                         if (appUtilityData.isCountdownTimerRunning) CountdownScreenValidationEvent.StopService else CountdownScreenValidationEvent.Idle
                     )
                 }
-
             }
         }
     }
@@ -75,6 +74,7 @@ class CountdownScreenViewModel @Inject constructor(
             onSuccess = {
                 appUtilityData.numberOfRunning = it.numberOfRunning
                 appUtilityData.isCountdownTimerRunning = it.isCountdownTimerRunning
+                appUtilityData.isAppRegisteredAsDeviceAdmin = it.isAppRegisteredAsDeviceAdmin
             },
             onError = {}
         )
@@ -85,6 +85,7 @@ class CountdownScreenViewModel @Inject constructor(
             appUtilityDataRepository.updateAppUtilityData(
                 numberOfRunning = appUtilityData.numberOfRunning + 1,
                 isCountdownTimerRunning = false,
+                isAppRegisteredAsDeviceAdmin = appUtilityData.isAppRegisteredAsDeviceAdmin,
                 onSuccess = {},
                 onError = {}
             )

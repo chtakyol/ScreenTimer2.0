@@ -31,7 +31,7 @@ fun DurationEntryScreen(
             when(event) {
                 is DurationScreenValidationEvent.Success -> {
                     Toast
-                        .makeText(context, "Cool!", Toast.LENGTH_SHORT)
+                        .makeText(context, "Screen Timer Start!", Toast.LENGTH_SHORT)
                         .show()
                     navController.navigate(
                         route = Screen.CountdownScreen.route

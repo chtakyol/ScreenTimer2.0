@@ -28,6 +28,7 @@ class LocalAppUtilityDataRepositoryImpl(
     override suspend fun updateAppUtilityData(
         numberOfRunning: Int,
         isCountdownTimerRunning: Boolean,
+        isAppRegisteredAsDeviceAdmin: Boolean,
         onSuccess: (isRecord: Boolean) -> Unit,
         onError: (Exception) -> Unit
     ) = withContext(Dispatchers.IO) {
@@ -37,6 +38,7 @@ class LocalAppUtilityDataRepositoryImpl(
                     .toBuilder()
                     .setNumberOfRunning(numberOfRunning)
                     .setIsCountdownTimerRunning(isCountdownTimerRunning)
+                    .setIsAppRegisteredAsDeviceAdmin(isAppRegisteredAsDeviceAdmin)
                     .build()
             }
             onSuccess(true)
@@ -49,7 +51,8 @@ class LocalAppUtilityDataRepositoryImpl(
         get() {
         return AppUtilityData(
             numberOfRunning = this.numberOfRunning,
-            isCountdownTimerRunning = this.isCountdownTimerRunning
+            isCountdownTimerRunning = this.isCountdownTimerRunning,
+            isAppRegisteredAsDeviceAdmin = this.isAppRegisteredAsDeviceAdmin
         )
     }
 }

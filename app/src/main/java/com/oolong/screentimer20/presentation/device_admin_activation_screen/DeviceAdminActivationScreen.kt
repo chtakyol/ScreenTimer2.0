@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.oolong.screentimer20.Screen
@@ -16,6 +17,7 @@ import com.oolong.screentimer20.utils.lockDevice
 
 @Composable
 fun DeviceAdminActivationScreen(
+    viewModel: DeviceAdminActivationViewModel = hiltViewModel(),
     navController: NavController = rememberNavController()
 ) {
     val context = LocalContext.current
@@ -25,6 +27,7 @@ fun DeviceAdminActivationScreen(
     ) { result ->
         result.data
         if (context.isScreenTimerDeviceAdmin()) {
+            viewModel.onDeviceAdminRegistrationComplete()
             navController.navigate(Screen.DurationEntryScreen.route)
         }
     }
