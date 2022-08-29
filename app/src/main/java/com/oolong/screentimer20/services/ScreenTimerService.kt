@@ -43,6 +43,11 @@ class ScreenTimerService: Service() {
     private var digitState = 0 // This design mistake
     private var duration = 0 // This values as min
 
+    override fun onCreate() {
+        super.onCreate()
+        showNotification()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when(it.action) {
@@ -51,7 +56,6 @@ class ScreenTimerService: Service() {
                         Log.d("ScreenTimerService", "Screen Timer Service Start")
                         configureTimerValues()
                         startTimer()
-                        showNotification()
                     }
                 }
                 ACTION_PAUSE_SERVICE -> {
@@ -130,11 +134,14 @@ class ScreenTimerService: Service() {
                 val notificationContent = getNotificationContent(duration)
                 updateNotification(notificationContent)
                 sendScreenTimerServiceTickBroadcast(duration)
-                if (duration == 0){
-                    cancelNotification()
-                    applicationContext.lockDevice()
-                    countDownTimer.cancel()
-                    countDownTimer.onFinish()
+                when (duration) {
+                    0 -> {
+                        stopForeground(true)
+                        cancelNotification()
+                        applicationContext.lockDevice()
+                        countDownTimer.cancel()
+                        countDownTimer.onFinish()
+                    }
                 }
             }
 

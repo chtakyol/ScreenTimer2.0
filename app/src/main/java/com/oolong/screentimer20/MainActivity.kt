@@ -29,9 +29,6 @@ class MainActivity : ComponentActivity() {
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val devicePolicyManager = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
-
         val screenTimerIntentFilter = IntentFilter(APP_PACKAGE_NAME)
         this.registerReceiver(screenTimerServiceBroadcastReceiver, screenTimerIntentFilter)
         setContent {
@@ -87,32 +84,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-//        unregisterReceiver(screenTimerServiceBroadcastReceiver)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        try {
-//            unregisterReceiver(screenTimerServiceBroadcastReceiver)
-        } catch (e: Exception) {
-//            throw(e)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-//        when(requestCode){
-//            100 -> {
-//                if (resultCode == Activity.RESULT_OK ) {
-//                    Log.d("Result", "OK")
-//                    countdownTimerViewModel.deviceAdminActive.value = true
-//                } else {
-//                    Log.d("Result", "Na")
-//                }
-//
-//            }
-//        }
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(screenTimerServiceBroadcastReceiver)
     }
 }

@@ -55,7 +55,10 @@ fun CountdownScreen(
                 }
             }
         }
-        if (durationDataFromBroadcast.value == 0) viewModel.updateAppUtilityData()
+        if (durationDataFromBroadcast.value == 0){
+            Log.d("CS", "App utility data updated")
+            viewModel.updateAppUtilityData()
+        }
     }
 
     val backgroundColor = Color(0xFF212121)
