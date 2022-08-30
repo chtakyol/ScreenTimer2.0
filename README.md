@@ -11,6 +11,8 @@
 <p align="center">
 <img src="screenshots/Screenshot_1661859768.png" style="height: 420px"/>
 <img src="screenshots/Screenshot_1661859795.png" style="height: 420px"/>
+</p>
+<p align="center">
 <img src="screenshots/Screenshot_1661859800.png" style="height: 420px"/>
 <img src="screenshots/Screenshot_1661859812.png" style="height: 420px"/>
 <img src="screenshots/Screenshot_1661859819.png" style="height: 420px"/>
