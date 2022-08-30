@@ -31,7 +31,6 @@ fun SplashScreen(
             when(event) {
                 SplashScreenNavigationEvent.NavigateToCountdownScreen -> {
                     navController.navigate(Screen.CountdownScreen.route)
-
                 }
                 SplashScreenNavigationEvent.NavigateToDurationEntryScreen -> {
                     navController.navigate(Screen.DurationEntryScreen.route)

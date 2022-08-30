@@ -11,6 +11,7 @@ interface IAppUtilityDataRepository {
     suspend fun updateAppUtilityData(
         numberOfRunning: Int,
         isCountdownTimerRunning: Boolean,
+        isAppRegisteredAsDeviceAdmin: Boolean,
         onSuccess: (isRecord: Boolean) -> Unit,
         onError: (Exception) -> Unit
     )

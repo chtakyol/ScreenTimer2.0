@@ -6,4 +6,5 @@ option java_multiple_files = true;
 message AppUtilityData {
   int32 numberOfRunning = 1;
   bool isCountdownTimerRunning = 2;
+  bool isAppRegisteredAsDeviceAdmin = 3;
 }

@@ -23,10 +23,10 @@ class SplashScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            delay(200L)
+            delay(400L)
             loadAppUtilityData()
-            Log.d("SplashScreen", appUtilityData.isCountdownTimerRunning.toString())
-            if (appUtilityData.numberOfRunning == 0) {
+            Log.d("SplashScreen", "Is app registered: ${appUtilityData.isAppRegisteredAsDeviceAdmin}")
+            if (!appUtilityData.isAppRegisteredAsDeviceAdmin) {
                 splashScreenNavigationEvent.emit(SplashScreenNavigationEvent.NavigateToOnboardingScreen)
             } else {
                 if (appUtilityData.isCountdownTimerRunning) {
@@ -43,6 +43,7 @@ class SplashScreenViewModel @Inject constructor(
             onSuccess = {
                 appUtilityData.numberOfRunning = it.numberOfRunning
                 appUtilityData.isCountdownTimerRunning = it.isCountdownTimerRunning
+                appUtilityData.isAppRegisteredAsDeviceAdmin = it.isAppRegisteredAsDeviceAdmin
             },
             onError = {}
         )

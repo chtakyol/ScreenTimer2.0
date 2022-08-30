@@ -35,6 +35,7 @@ class CountdownScreenViewModel @Inject constructor(
             delay(100L)
             loadDurationData()
             loadAppUtilityData()
+            delay(100L)
             validationState.emit(
                 CountdownScreenValidationEvent.StartService
             )
@@ -50,7 +51,6 @@ class CountdownScreenViewModel @Inject constructor(
                         if (appUtilityData.isCountdownTimerRunning) CountdownScreenValidationEvent.StopService else CountdownScreenValidationEvent.Idle
                     )
                 }
-
             }
         }
     }
@@ -74,16 +74,18 @@ class CountdownScreenViewModel @Inject constructor(
             onSuccess = {
                 appUtilityData.numberOfRunning = it.numberOfRunning
                 appUtilityData.isCountdownTimerRunning = it.isCountdownTimerRunning
+                appUtilityData.isAppRegisteredAsDeviceAdmin = it.isAppRegisteredAsDeviceAdmin
             },
             onError = {}
         )
     }
 
-    private fun updateAppUtilityData() {
+    fun updateAppUtilityData() {
         viewModelScope.launch(Dispatchers.IO) {
             appUtilityDataRepository.updateAppUtilityData(
-                numberOfRunning = appUtilityData.numberOfRunning,
+                numberOfRunning = appUtilityData.numberOfRunning + 1,
                 isCountdownTimerRunning = false,
+                isAppRegisteredAsDeviceAdmin = appUtilityData.isAppRegisteredAsDeviceAdmin,
                 onSuccess = {},
                 onError = {}
             )

@@ -16,6 +16,7 @@ import com.oolong.screentimer20.utils.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.oolong.screentimer20.utils.Constants.ACTION_STOP_SERVICE
 import com.oolong.screentimer20.utils.getHours
 import com.oolong.screentimer20.utils.getMinutes
+import com.oolong.screentimer20.utils.lockDevice
 import com.oolong.screentimer20.utils.sendScreenTimerServiceTickBroadcast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +43,11 @@ class ScreenTimerService: Service() {
     private var digitState = 0 // This design mistake
     private var duration = 0 // This values as min
 
+    override fun onCreate() {
+        super.onCreate()
+        showNotification()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when(it.action) {
@@ -50,7 +56,6 @@ class ScreenTimerService: Service() {
                         Log.d("ScreenTimerService", "Screen Timer Service Start")
                         configureTimerValues()
                         startTimer()
-                        showNotification()
                     }
                 }
                 ACTION_PAUSE_SERVICE -> {
@@ -91,8 +96,14 @@ class ScreenTimerService: Service() {
         )
     }
 
+    private fun cancelNotification() {
+        notificationManager.cancel(1)
+    }
+
     private fun showNotification() {
         notificationManager.notify(1, notificationBuilder.build())
+        val notification = notificationBuilder.build()
+        startForeground(1, notification)
     }
 
     private suspend fun configureTimerValues() {
@@ -123,9 +134,14 @@ class ScreenTimerService: Service() {
                 val notificationContent = getNotificationContent(duration)
                 updateNotification(notificationContent)
                 sendScreenTimerServiceTickBroadcast(duration)
-                if (duration == 0){
-                    countDownTimer.cancel()
-                    countDownTimer.onFinish()
+                when (duration) {
+                    0 -> {
+                        stopForeground(true)
+                        cancelNotification()
+                        applicationContext.lockDevice()
+                        countDownTimer.cancel()
+                        countDownTimer.onFinish()
+                    }
                 }
             }
 

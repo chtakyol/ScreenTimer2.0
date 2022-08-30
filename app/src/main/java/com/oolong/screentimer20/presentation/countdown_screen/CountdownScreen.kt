@@ -57,6 +57,12 @@ fun CountdownScreen(
         }
     }
 
+    if (durationDataFromBroadcast.value == 1){
+        viewModel.updateAppUtilityData()
+        navController.navigate(Screen.DurationEntryScreen.route)
+        durationDataFromBroadcast.value = 0
+    }
+
     val backgroundColor = Color(0xFF212121)
 
     Column(

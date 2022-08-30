@@ -29,7 +29,7 @@ object NotificationModule {
             .setContentTitle("Welcome!")
             .setContentText("This is content text.")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
     }
 
     @Singleton
